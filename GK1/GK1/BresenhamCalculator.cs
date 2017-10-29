@@ -2,16 +2,12 @@
 
 namespace GK1
 {
-    internal class BresenhamDrawer
+    internal static class BresenhamCalculator
     {
         private static readonly Color Color = Color.Black;
 
         public static void DrawLine(Point p1, Point p2, Bitmap bitmap)
         {
-            //if (p1.X < 0 || p2.X < 0 | p1.Y < 0 | p2.Y < 0 || p1.X > bitmap.Width || p2.X > bitmap.Width ||
-            //    p1.Y > bitmap.Height || p2.Y > bitmap.Width)
-            //    return;
-
             var differencePoint = new Point(p2.X - p1.X, p2.Y - p1.Y);
             var octant = FindOctant(differencePoint);
 
