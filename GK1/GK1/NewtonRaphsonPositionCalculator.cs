@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Security.Cryptography.X509Certificates;
 
 namespace GK1
 {
@@ -16,64 +15,100 @@ namespace GK1
             _solver = solver;
         }
 
-        private double BasicFunc(double[] x) => 0;
+        private static double BasicFunc(double[] x) => 0;
 
         public void CalculatePointsPosition(Point[] points, VH[] verticalHorizontals, int[] maxSizes, int startingIndex,
             int pointsCount)
         {
-            var equations = new Func<double[], double>[pointsCount * 2];
-            var derivatives = new Func<double[], double>[pointsCount * 2, pointsCount * 2];
-            var variables = new double[pointsCount * 2];
+            var equations = new List<Func<double[], double>>();
+            var derivatives = new List<List<Func<double[], double>>>();
+            var x0 = new List<double>();
 
+            double startingX = points[startingIndex].X;
+            double startingY = points[startingIndex].Y;
 
-           double startingX = points[startingIndex].X;
-           double startingY = points[startingIndex].Y;
+            var variableMapArray = new int[pointsCount * 2];
 
-            equations[0] = x =>
-                100 * (Math.Abs(x[startingIndex * 2] - startingX) + Math.Abs(x[startingIndex * 2 + 1] - startingY));
+            equations.Add(x => 100 * (x[0] - startingX));
+            equations.Add(x => 100 * (x[1] - startingY));
 
-            for (int i = 0; i < pointsCount; i++)
-                derivatives[0, i] = BasicFunc;
+            x0.Add(points[startingIndex].X);
+            x0.Add(points[startingIndex].Y);
 
-            derivatives[0, 2 * startingIndex] = x => x[2 * startingIndex] > startingX ? -100 : 100;
-            derivatives[0, 2 * startingIndex + 1] = x => x[2 * startingIndex + 1] > startingY ? -100 : 100;
+            derivatives.Add(new List<Func<double[], double>>());
+            derivatives.Add(new List<Func<double[], double>>());
 
-            var currentRelationCount = 1;
+            derivatives[0].Add(x => 100);
+            derivatives[0].Add(BasicFunc);
+            derivatives[1].Add(BasicFunc);
+            derivatives[1].Add(x => 100);
+
+            int variableCount = 2;
+            int equationCount = 2;
+            variableMapArray[0] = 2 * startingIndex;
+            variableMapArray[1] = 2 * startingIndex + 1;
 
             for (int i = 0; i < pointsCount; i++)
             {
-                variables[2 * i] = points[i].X;
-                variables[2 * i + 1] = points[i].Y;
-
-                if (currentRelationCount > 2 * pointsCount)
-                    throw new ArgumentException("Za dużo relacji");
-
-                if (maxSizes[i] > 0)
-                {
-                    
-                }
-                if (verticalHorizontals[i] == VH.Horizontal)
-                {
-                    
-                }
                 if (verticalHorizontals[i] == VH.Vertical)
                 {
+                    x0.Add(points[i].X);
+                    x0.Add(points[(i + 1) % pointsCount].X);
+                    derivatives.Add(new List<Func<double[], double>>());
+                    for (int j = 0; j < variableCount; j++) //wypelnianie macierzy pochodnych
+                    {
+                        derivatives[j].Add(BasicFunc);
+                        derivatives[j].Add(BasicFunc);
+                    }
+                    for (int j = 0; j < variableCount; j++)
+                        derivatives[equationCount].Add(BasicFunc);
 
+                    var currentCount = variableCount;
+                    equations.Add(x => x[currentCount] - x[currentCount + 1]);
+
+                    derivatives[equationCount].Add(x => 1);
+                    derivatives[equationCount].Add(x => -1);
+
+                    equationCount++;
+                    variableMapArray[variableCount++] = 2 * i;
+                    variableMapArray[variableCount++] = 2 * i + 2;
                 }
             }
-            for (int i = currentRelationCount; i < pointsCount * 2; i++)
+            var derivativeMatrix = new Func<double[], double>[variableCount, variableCount];
+            var equationsVector = new Func<double[], double>[variableCount];
+            for (int i = 0; i < variableCount; i++)
             {
-                equations[i] = BasicFunc;
-                for (int j = 0; j < pointsCount*2; j++)
-                    derivatives[i,j] = BasicFunc;
+                var curI = i;
+                var startingValue = i % 2 == 0 ? points[i / 2].X : points[i / 2].Y;
+                equationsVector[i] = x => x[curI] - startingValue;
+                for (int j = 0; j < variableCount; j++)
+                    derivativeMatrix[i, j] = BasicFunc;
+
+                derivativeMatrix[i, i] = x => 1;
             }
 
-            var system = new QuadraticEquationSystem(equations, derivatives);
+            for (int i = 0; i < derivatives.Count; i++)
+            {
+                equationsVector[i] = equations[i];
+                for (int j = 0; j < variableCount; j++)
+                    derivativeMatrix[i, j] = derivatives[i][j];
+            }
+            if (equationCount > 1)
+            {
 
-            _solver.Solve(system, variables, out double[] results, MaxIterations, Precision);
+            }
+            var system = new QuadraticEquationSystem(equationsVector, derivativeMatrix);
 
-            for (int i = 0; i < pointsCount; i++)
-                points[i] = new Point((int) results[2 * i], (int) results[2 * i + 1]);
+            _solver.Solve(system, x0.ToArray(), out double[] results, MaxIterations, Precision);
+
+            for (int i = 0; i < variableCount; i++)
+            {
+                var index = variableMapArray[i];
+                if (index % 2 == 1)
+                    points[index / 2] = new Point(points[index / 2].X, (int) results[i]);
+                else
+                    points[index / 2] = new Point((int) results[i], points[index / 2].Y);
+            }
         }
     }
 }
