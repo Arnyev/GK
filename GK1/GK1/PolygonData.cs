@@ -10,17 +10,15 @@ namespace GK1
         private Point _lastMovePosition;
         private VH[] _verticalHorizontals;
         private int[] _maxSizes;
-        private  Point[] _points;
+        private Point[] _points;
         private int _currentPointCount;
         private readonly IPositionCalculator _positionCalculator;
         private readonly IBasicCalculator _basicCalculator;
-        private readonly int RectangleWidth;
-        private readonly int MinimumDistance;
+        private readonly int _minimumDistance;
 
-        internal PolygonData()
+        internal PolygonData(int minimumDistance)
         {
-            RectangleWidth = 8;
-            MinimumDistance = 5;
+            _minimumDistance = minimumDistance;
             _lastMovePosition = new Point(-1, -1);
             _currentPointCount = 0;
             _maxSizes = new int[MaxPoints];
@@ -29,7 +27,6 @@ namespace GK1
             _basicCalculator = new BasicCalculator();
             _positionCalculator = new PositionCalculator(_basicCalculator);
         }
-
 
         public void ChangeRelation(int index, VH newRelation)
         {
@@ -55,28 +52,16 @@ namespace GK1
             Realign(index);
         }
 
-        public void MovePolygon(Point newPosition)
+        public void MovePolygon(int dx, int dy)
         {
-            if (_lastMovePosition.X == -1)
-            {
-                _lastMovePosition = newPosition;
-                return;
-            }
-
-            int xDiff = newPosition.X - _lastMovePosition.X;
-            int yDiff = newPosition.Y - _lastMovePosition.Y;
             for (int i = 0; i < _currentPointCount; i++)
-                _points[i] = new Point(_points[i].X + xDiff, _points[i].Y + yDiff);
-        }
-
-        public void ResetMovePosition()
-        {
-            _lastMovePosition = new Point(-1, -1);
+                _points[i] = new Point(_points[i].X + dx, _points[i].Y + dy);
         }
 
         public void Realign(int startingIndex)
         {
-            _positionCalculator.CalculatePointsPosition(_points, _verticalHorizontals, _maxSizes, startingIndex, _currentPointCount);
+            _positionCalculator.CalculatePointsPosition(_points, _verticalHorizontals, _maxSizes, startingIndex,
+                _currentPointCount);
         }
 
         public bool ChangeMaxSize(int index, int newMaxSize)
@@ -103,8 +88,8 @@ namespace GK1
         public int CheckIfNextToExistingPoint(Point closePoint)
         {
             for (int i = 0; i < _currentPointCount; ++i)
-                if (Math.Abs(_points[i].X - closePoint.X) <= RectangleWidth / 2 &&
-                    Math.Abs(_points[i].Y - closePoint.Y) <= RectangleWidth / 2)
+                if (Math.Abs(_points[i].X - closePoint.X) <= _minimumDistance / 2 &&
+                    Math.Abs(_points[i].Y - closePoint.Y) <= _minimumDistance / 2)
                     return i;
 
             return -1;
@@ -127,9 +112,10 @@ namespace GK1
         {
             for (var i = 0; i < _currentPointCount; i++)
             {
-                int shortDist = _basicCalculator.ShortestDistanceFromSegment(_points[i], _points[(i + 1) % _currentPointCount], closePoint);
+                int shortDist = _basicCalculator.ShortestDistanceFromSegment(_points[i],
+                    _points[(i + 1) % _currentPointCount], closePoint);
 
-                if (shortDist <= MinimumDistance)
+                if (shortDist <= _minimumDistance)
                     return i;
             }
             return -1;
@@ -137,12 +123,14 @@ namespace GK1
 
         public void GetRelations(int index, out VH verticalHorizontal, out int maxSize, out int currentDistance)
         {
-            currentDistance = _basicCalculator.EuclideanDistance(_points[index], _points[(index + 1) % _currentPointCount]);
+            currentDistance =
+                _basicCalculator.EuclideanDistance(_points[index], _points[(index + 1) % _currentPointCount]);
             verticalHorizontal = _verticalHorizontals[index];
             maxSize = _maxSizes[index];
         }
 
-        public void GetData(out Point[] points, out VH[] verticalHorizontal, out int[] maxSizes,out int currentPointCount)
+        public void GetData(out Point[] points, out VH[] verticalHorizontal, out int[] maxSizes,
+            out int currentPointCount)
         {
             points = _points;
             verticalHorizontal = _verticalHorizontals;
@@ -152,20 +140,21 @@ namespace GK1
 
         public Point GetPoint(int index)
         {
-            if (index < 0)
-                return new Point(-1, -1);
-            return _points[index];
+            return index < 0 ? new Point(-1, -1) : _points[index];
         }
 
         public PolygonDTO GetPolygonDTO()
         {
-            PolygonDTO polygonDto = new PolygonDTO();
-            polygonDto.Points = _points;
-            polygonDto.VerticalHorizontals = _verticalHorizontals;
-            polygonDto.MaxSizes = _maxSizes;
-            polygonDto.CurrentPointCount = _currentPointCount;
+            var polygonDto = new PolygonDTO
+            {
+                Points = _points,
+                VerticalHorizontals = _verticalHorizontals,
+                MaxSizes = _maxSizes,
+                CurrentPointCount = _currentPointCount
+            };
             return polygonDto;
         }
+
         public void SetDataFromDto(PolygonDTO polygonDto)
         {
             _points = polygonDto.Points;
@@ -174,6 +163,7 @@ namespace GK1
             _currentPointCount = polygonDto.CurrentPointCount;
         }
     }
+
     [Serializable]
     public class PolygonDTO
     {

@@ -1,11 +1,14 @@
-﻿namespace GK1
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace GK1
 {
     partial class MainForm
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -122,14 +125,14 @@
 
         #endregion
 
-        private System.Windows.Forms.PictureBox pictureBox;
-        private System.Windows.Forms.ContextMenuStrip rightClickMenu;
-        private System.Windows.Forms.ToolStripMenuItem constantLengthRelationControl;
-        private System.Windows.Forms.ToolStripMenuItem verticalRelationControl;
-        private System.Windows.Forms.ToolStripMenuItem horizontalRelationControl;
-        private System.Windows.Forms.ToolStripTextBox constLengthTextBox;
-        private System.Windows.Forms.Button saveButton;
-        private System.Windows.Forms.Button loadButton;
+        private PictureBox pictureBox;
+        private ContextMenuStrip rightClickMenu;
+        private ToolStripMenuItem constantLengthRelationControl;
+        private ToolStripMenuItem verticalRelationControl;
+        private ToolStripMenuItem horizontalRelationControl;
+        private ToolStripTextBox constLengthTextBox;
+        private Button saveButton;
+        private Button loadButton;
     }
 }
 

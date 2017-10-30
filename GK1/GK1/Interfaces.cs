@@ -22,26 +22,20 @@ namespace GK1
 
     public interface IPolygonData
     {
-        void ResetMovePosition();
-        void MovePolygon(Point newPosition);
+        void MovePolygon(int dx, int dy);
         void MovePoint(int index, Point newPosition);
         void ChangeRelation(int index, VH newRelation);
         void Realign(int startingIndex);
-
         bool ChangeMaxSize(int index, int newMaxSize);
-
         void AddPoint(Point newPoint);
         int CheckIfNextToExistingPoint(Point closePoint);
-
         int CheckIfNextToExistingEdge(Point closePoint);
-
         void GetRelations(int index, out VH verticalHorizontal, out int maxSize, out int currentDistance);
-
         void DeletePoint(int index);
         void GetData(out Point[] points, out VH[] verticalHorizontal, out int[] maxSizes, out int currentPointCount);
-
         Point GetPoint(int index);
-
+        PolygonDTO GetPolygonDTO();
+        void SetDataFromDto(PolygonDTO polygonDto);
     }
 
     internal interface IMatrixInverser

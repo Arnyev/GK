@@ -9,7 +9,7 @@ namespace GK1
             int length = matrix.Length;
             inversed = new double[length][];
             double[][] numArray = CopyMatrix(matrix);
-            LuExpansion(length, ref numArray, ref numArray, out var rc);
+            LuExpansion(length, ref numArray, ref numArray, out int[] rc);
             int max = length - 1;
             double[] a = new double[length];
             for (int i = 0; i < length; ++i)

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace GK1
+﻿namespace GK1
 {
     internal class NewtonRaphsonEquationSolver
     {
@@ -21,7 +19,7 @@ namespace GK1
 
             system.Jacobian(x0, ref jacobian);
             system.Calculate(x0, ref functionValues);
-            double[][] inversed = null;
+            double[][] inversed;
             try
             {
                 _matrixInverser.InverseMatrix(jacobian, out inversed);

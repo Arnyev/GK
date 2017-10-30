@@ -2,7 +2,7 @@
 
 namespace GK1
 {
-    internal class FormDrawer:IFormDrawer
+    internal class FormDrawer : IFormDrawer
     {
         private readonly Font _drawFont = new Font("Arial", 16);
         private readonly SolidBrush _drawBrush = new SolidBrush(Color.Black);
@@ -13,13 +13,13 @@ namespace GK1
             _rectangleWidth = rectangleWidth;
         }
 
-        const string Instructions =
+        private const string Instructions =
             "Naciśnij lewy przycisk na wierzchołek aby go złapać wierzchołek, jeszcze raz lewy aby wypuścić. \n" +
             "Naciśnij lewy przycisk dwa razy aby stworzyć nowy wierzchołek. \n" +
             "Naciśnij prawy przycisk koło krawędzi aby wybrać relację. \n" +
             "Naciśnij prawy przycisk na wierzchołek aby go usunąć\n" +
             "Naciśnij 1 aby przełączyć wielokąt\n" +
-            "Naciśnij m aby ruszyć aktywny wielokąt(super wrażliwe na ruch myszy)";
+            "Przytrzymaj m aby ruszyć aktywny wielokąt";
 
 
         public void Redraw(IPolygonData[] polygonData, Bitmap bitmap, Point selectedPoint, int polygonCount)
@@ -30,7 +30,9 @@ namespace GK1
                 graphics.DrawString(Instructions, new Font("Arial", 10), _drawBrush, new Point(3, 3));
                 for (int j = 0; j < polygonCount; j++)
                 {
-                    polygonData[j].GetData(out Point[] points, out VH[] verticalsHorizontals, out int[] maxSizes, out int pointsCount);
+                    polygonData[j].GetData(out Point[] points, out VH[] verticalsHorizontals, out int[] maxSizes,
+                        out int pointsCount);
+
                     for (var i = 0; i < pointsCount; i++)
                     {
 
