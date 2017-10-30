@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Drawing;
 
 namespace GK1
 {
@@ -26,4 +21,13 @@ namespace GK1
             Bitmap bitmap, int selectedPointIndex);
     }
 
+    internal interface IPointsProvider
+    {//todo
+
+    }
+
+    internal interface IMatrixInverser
+    {
+        void InverseMatrix(double[][] matrix, out double[][] inversed);
+    }
 }

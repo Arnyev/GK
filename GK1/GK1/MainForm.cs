@@ -5,9 +5,8 @@ using System.Windows.Forms;
 
 namespace GK1
 {
-    public partial class Form1 : Form
+    public partial class MainForm : Form
     {
-        public const int MaxPoints = 100;
         public const int MinimumDistance = 5;
 
         private Bitmap _mainBitmap;
@@ -17,22 +16,23 @@ namespace GK1
 
         private bool _moveKeyPressed;
         private Point _lastPosition;
-        private int _selectedPolygon = 0;
         private const int RectangleWidth = 8;
 
-
+        private int _selectedPolygon = 0;
+        public const int MaxPoints = 100;
         private readonly List<VH[]> _verticalHorizontals;
         private readonly List<int[]> _maxSizes;
         private readonly List<Point[]> _points;
         private readonly List<int> _currentPointCounts;
 
-        private readonly IPositionCalculator _positionCalculator;
-        private readonly IBasicCalculator _basicCalculator;
-        private readonly IFormDrawer _formDrawer;
 
         private VH[] VerticalHorizontals => _verticalHorizontals[_selectedPolygon];
         private int[]MaxSizes => _maxSizes[_selectedPolygon];
         private Point[] Points => _points[_selectedPolygon];
+
+        private readonly IPositionCalculator _positionCalculator;
+        private readonly IBasicCalculator _basicCalculator;
+        private readonly IFormDrawer _formDrawer;
 
         private int CurrentPointCount
         {
@@ -40,7 +40,7 @@ namespace GK1
             set => _currentPointCounts[_selectedPolygon] = value;
         }
 
-        public Form1()
+        public MainForm()
         {
             InitializeComponent();
 
@@ -67,7 +67,9 @@ namespace GK1
             _currentPointCounts = new List<int> {0};
 
             _basicCalculator = new BasicCalculator();
-            _positionCalculator = new PositionCalculator(_basicCalculator);
+            //_positionCalculator = new PositionCalculator(_basicCalculator);
+            _positionCalculator =
+                new NewtonRaphsonPositionCalculator(new NewtonRaphsonEquationSolver(new MatrixCalculationHelper()));
             _formDrawer = new FormDrawer(RectangleWidth);
         }
 
