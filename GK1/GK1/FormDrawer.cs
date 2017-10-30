@@ -17,34 +17,40 @@ namespace GK1
             "Naciśnij lewy przycisk na wierzchołek aby go złapać wierzchołek, jeszcze raz lewy aby wypuścić. \n" +
             "Naciśnij lewy przycisk dwa razy aby stworzyć nowy wierzchołek. \n" +
             "Naciśnij prawy przycisk koło krawędzi aby wybrać relację. \n" +
-            "Naciśnij prawy przycisk na wierzchołek aby go usunąć";
+            "Naciśnij prawy przycisk na wierzchołek aby go usunąć\n" +
+            "Naciśnij 1 aby przełączyć wielokąt\n" +
+            "Naciśnij m aby ruszyć aktywny wielokąt(super wrażliwe na ruch myszy)";
 
-        public void Redraw(int currentPointCount, int[]maxSizes, VH[] verticalsHorizontals, Point[] points,
-            Bitmap bitmap, int selectedPointIndex)
+
+        public void Redraw(IPolygonData[] polygonData, Bitmap bitmap, Point selectedPoint, int polygonCount)
         {
-
             using (var graphics = Graphics.FromImage(bitmap))
             {
                 graphics.Clear(Color.White);
                 graphics.DrawString(Instructions, new Font("Arial", 10), _drawBrush, new Point(3, 3));
-
-                for (var i = 0; i < currentPointCount; i++)
+                for (int j = 0; j < polygonCount; j++)
                 {
-                    graphics.DrawRectangle(Pens.Blue, points[i].X - _rectangleWidth / 2,
-                        points[i].Y - _rectangleWidth / 2, _rectangleWidth, _rectangleWidth);
-                    DrawLineAndLabel(graphics, points[i], points[(i + 1) % currentPointCount], maxSizes[i],
-                        verticalsHorizontals[i], bitmap);
+                    polygonData[j].GetData(out Point[] points, out VH[] verticalsHorizontals, out int[] maxSizes, out int pointsCount);
+                    for (var i = 0; i < pointsCount; i++)
+                    {
+
+                        graphics.DrawRectangle(Pens.Blue, points[i].X - _rectangleWidth / 2,
+                            points[i].Y - _rectangleWidth / 2, _rectangleWidth, _rectangleWidth);
+                        DrawLineAndLabel(graphics, points[i], points[(i + 1) % pointsCount], maxSizes[i],
+                            verticalsHorizontals[i], bitmap);
+                    }
                 }
-                if (selectedPointIndex != -1)
-                    graphics.FillRectangle(Brushes.Red, points[selectedPointIndex].X - _rectangleWidth / 2,
-                        points[selectedPointIndex].Y - _rectangleWidth / 2, _rectangleWidth, _rectangleWidth);
+
+                if (selectedPoint.X != -1)
+                    graphics.FillRectangle(Brushes.Red, selectedPoint.X - _rectangleWidth / 2,
+                        selectedPoint.Y - _rectangleWidth / 2, _rectangleWidth, _rectangleWidth);
             }
         }
 
         private void DrawLineAndLabel(Graphics graphics, Point p1, Point p2, int maxSize, VH verticalHorizontal,
             Bitmap bitmap)
         {
-            BresenhamCalculator.DrawLine(p1, p2, bitmap);
+            BresenhamDrawer.DrawLine(p1, p2, bitmap);
 
             if (maxSize > 0)
                 graphics.DrawString(maxSize.ToString(), _drawFont, _drawBrush,

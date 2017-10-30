@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
+using System.Xml.Serialization;
 
 namespace GK1
 {
@@ -10,42 +12,21 @@ namespace GK1
         public const int MinimumDistance = 5;
 
         private Bitmap _mainBitmap;
-
-        private int _selectedPointIndex;
-        private int _rightClickedLineIndex;
-
         private bool _moveKeyPressed;
-        private Point _lastPosition;
         private const int RectangleWidth = 8;
-
-        private int _selectedPolygon = 0;
-        public const int MaxPoints = 100;
-        private readonly List<VH[]> _verticalHorizontals;
-        private readonly List<int[]> _maxSizes;
-        private readonly List<Point[]> _points;
-        private readonly List<int> _currentPointCounts;
-
-
-        private VH[] VerticalHorizontals => _verticalHorizontals[_selectedPolygon];
-        private int[]MaxSizes => _maxSizes[_selectedPolygon];
-        private Point[] Points => _points[_selectedPolygon];
-
-        private readonly IPositionCalculator _positionCalculator;
-        private readonly IBasicCalculator _basicCalculator;
+        private PolygonData[] _polygons;
+        private const int PolygonCount = 2;
         private readonly IFormDrawer _formDrawer;
-
-        private int CurrentPointCount
-        {
-            get => _currentPointCounts[_selectedPolygon];
-            set => _currentPointCounts[_selectedPolygon] = value;
-        }
+        private int _selectedPolygonIndex = 0;
+        private int _selectedLineIndex = 0;
+        private int _selectedPointIndex = -1;
 
         public MainForm()
         {
             InitializeComponent();
 
-            pictureBox1.MouseDoubleClick += AddPoint;
-            pictureBox1.MouseClick += PictureBox1_MouseClick;
+            pictureBox.MouseDoubleClick += (s, e) => _polygons[_selectedPolygonIndex].AddPoint(new Point(e.X, e.Y));
+            pictureBox.MouseClick += PictureBox1_MouseClick;
             constLengthTextBox.KeyPress += ConstLengthTextBoxKeyPress;
             constLengthTextBox.LostFocus += ConstLengthTextBoxTextChanged;
             constantLengthRelationControl.Click += ConstantLengthRelationControl_CheckedChanged;
@@ -54,134 +35,130 @@ namespace GK1
             KeyDown += Form1_KeyDown;
             KeyUp += Form1_KeyUp;
             Resize += Form1_Resize;
-            pictureBox1.MouseMove += Form1_MouseMove;
+            pictureBox.MouseMove += Form1_MouseMove;
 
-            _selectedPointIndex = -1;
-            _lastPosition = new Point(-1, -1);
-            _mainBitmap = new Bitmap(pictureBox1.Width, pictureBox1.Height);
-            pictureBox1.Image = _mainBitmap;
+            saveButton.Click += SaveButton_Click;
+            loadButton.Click += LoadButton_Click;
 
-            _verticalHorizontals = new List<VH[]> {new VH[MaxPoints]};
-            _maxSizes = new List<int[]> {new int[MaxPoints]};
-            _points = new List<Point[]> {new Point[MaxPoints]};
-            _currentPointCounts = new List<int> {0};
+            saveButton.KeyDown += Form1_KeyDown;
+            loadButton.KeyDown += Form1_KeyDown;
 
-            _basicCalculator = new BasicCalculator();
-            //_positionCalculator = new PositionCalculator(_basicCalculator);
-            _positionCalculator =
-                new NewtonRaphsonPositionCalculator(new NewtonRaphsonEquationSolver(new MatrixCalculationHelper()));
+            saveButton.KeyUp += Form1_KeyUp;
+            loadButton.KeyUp += Form1_KeyUp;
+
+            _mainBitmap = new Bitmap(pictureBox.Width, pictureBox.Height);
+            pictureBox.Image = _mainBitmap;
+            _polygons = new PolygonData[PolygonCount];
+            _polygons[0] = new PolygonData();
+            _polygons[1] = new PolygonData();
             _formDrawer = new FormDrawer(RectangleWidth);
+        }
+
+        private void LoadButton_Click(object sender, EventArgs e)
+        {
+            var fileDialog = new OpenFileDialog();
+            if (fileDialog.ShowDialog() == DialogResult.OK)
+            {
+                BinaryFormatter serializer = new BinaryFormatter();
+
+                var path = fileDialog.FileName;
+                System.IO.FileStream file = System.IO.File.Open(path, System.IO.FileMode.Open);
+
+                var polygonsDto = (PolygonDTO[])serializer.Deserialize(file);
+                for (int i = 0; i < PolygonCount; i++)
+                    _polygons[i].SetDataFromDto(polygonsDto[i]);
+
+                file.Close();
+            }
+        }
+
+        private void SaveButton_Click(object sender, EventArgs e)
+        {
+            var fileDialog = new SaveFileDialog();
+            if (fileDialog.ShowDialog() == DialogResult.OK)
+            {
+                BinaryFormatter serializer = new BinaryFormatter();
+
+                var path = fileDialog.FileName;
+                System.IO.FileStream file = System.IO.File.Create(path);
+
+                var polygonsDto = new PolygonDTO[PolygonCount];
+                for (int i = 0; i < PolygonCount; i++)
+                    polygonsDto[i] = _polygons[i].GetPolygonDTO();
+
+                serializer.Serialize(file, polygonsDto);
+                file.Close();
+            }
         }
 
         private void ConstantLengthRelationControl_CheckedChanged(object sender, EventArgs e)
         {
             if (constantLengthRelationControl.Checked)
-                MaxSizes[_rightClickedLineIndex] = 0;
+                _polygons[_selectedPolygonIndex].ChangeMaxSize(_selectedLineIndex, 0);
         }
-
 
         private void Form1_Resize(object sender, EventArgs e)
         {
-            _mainBitmap = new Bitmap(pictureBox1.Width, pictureBox1.Height);
-            pictureBox1.Image = _mainBitmap;
+            _mainBitmap = new Bitmap(pictureBox.Width, pictureBox.Height);
+            pictureBox.Image = _mainBitmap;
             Redraw();
         }
 
         private void Form1_KeyUp(object sender, KeyEventArgs e)
         {
             _moveKeyPressed = false;
-            _lastPosition = new Point(-1, -1);
+            _polygons[_selectedPolygonIndex].ResetMovePosition();
         }
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.M)
                 _moveKeyPressed = true;
+            else if (e.KeyCode == Keys.D1)
+                _selectedPolygonIndex = _selectedPolygonIndex == 0 ? 1 : 0;
         }
 
         private void Form1_MouseMove(object sender, MouseEventArgs e)
         {
             if (_moveKeyPressed)
-                MoveAllPoints(e.X, e.Y);
+                _polygons[_selectedPolygonIndex].MovePolygon(new Point(e.X, e.Y));
 
             else if (_selectedPointIndex != -1)
-            {
-                Points[_selectedPointIndex] = new Point(e.X, e.Y);
-                Realign(_selectedPointIndex);
-            }
-        }
+                _polygons[_selectedPolygonIndex].MovePoint(_selectedPointIndex, new Point(e.X, e.Y));
 
-        private void MoveAllPoints(int cursorPositionX, int cursorPositionY)
-        {
-            //Świeżo po naciśnięciu, więc nie ma zapisanej pozycji i nie wiadomo gdzie ruszyć.
-            if (_lastPosition.X != -1)
-                return;
-
-            int xDiff = cursorPositionX - _lastPosition.X;
-            int yDiff = cursorPositionY - _lastPosition.Y;
-            var points = Points;
-            for (int i = 0; i < CurrentPointCount; i++)
-                points[i] = new Point(points[i].X + xDiff, points[i].Y + yDiff);
-
-            _lastPosition = new Point(cursorPositionX, cursorPositionY);
             Redraw();
-         }
-
+        }
 
         private void RelationControlClick(object sender, EventArgs e)
         {
-            var currentPointCount = CurrentPointCount;
             var clickedRelation = sender == horizontalRelationControl ? VH.Horizontal : VH.Vertical;
             var control = (ToolStripMenuItem) sender;
 
             bool clicked = !control.Checked;
-            var verticalHorizontals = VerticalHorizontals;
-            var nextRelation = verticalHorizontals[(_rightClickedLineIndex + 1) % currentPointCount];
-            var prevRelation =
-                verticalHorizontals[(_rightClickedLineIndex + currentPointCount - 1) % currentPointCount];
-
-            if (clicked && nextRelation != clickedRelation && prevRelation != clickedRelation)
-                verticalHorizontals[_rightClickedLineIndex] = clickedRelation;
+            if (clicked)
+                _polygons[_selectedPolygonIndex].ChangeRelation(_selectedLineIndex, clickedRelation);
             else
-                verticalHorizontals[_rightClickedLineIndex] = VH.None;
+                _polygons[_selectedPolygonIndex].ChangeRelation(_selectedLineIndex, VH.None);
 
-            Realign(_rightClickedLineIndex);
+            Redraw();
         }
 
         private void ConstLengthTextBoxTextChanged(object sender, EventArgs e)
         {
+            int newMaxSize = 0;
+            int.TryParse(constLengthTextBox.Text, out newMaxSize);
+            if (newMaxSize < 0)
+                newMaxSize = 0;
 
-            var maxSizes = MaxSizes;
-            var lastLength = maxSizes[_rightClickedLineIndex];
-
-            if (!int.TryParse(constLengthTextBox.Text, out maxSizes[_rightClickedLineIndex]) ||
-                maxSizes[_rightClickedLineIndex] <= 0)
-            {
-                maxSizes[_rightClickedLineIndex] = 0;
-            }
-
-            try
-            {
-                Realign(_rightClickedLineIndex);
-            }
-            catch (ArgumentException)
-            {
-                MessageBox.Show("Za duża długość", "Error");
-                maxSizes[_rightClickedLineIndex] = lastLength;
-            }
+            _polygons[_selectedPolygonIndex].ChangeMaxSize(_selectedLineIndex, newMaxSize);
+            
             rightClickMenu.Close();
+            Redraw();
         }
 
         private void ConstLengthTextBoxKeyPress(object sender, KeyPressEventArgs e)
         {
             e.Handled = !char.IsDigit(e.KeyChar) && !char.IsControl(e.KeyChar);
-        }
-
-        private void AddPoint(object sender, MouseEventArgs e)
-        {
-            Points[CurrentPointCount] = new Point(e.X, e.Y);
-            CurrentPointCount++;
-            Realign(CurrentPointCount - 1);
         }
 
         private void PictureBox1_MouseClick(object sender, MouseEventArgs e)
@@ -200,107 +177,56 @@ namespace GK1
 
         private bool CheckAndDeleteIfNextToPoint(Point clickPoint)
         {
-            var points = Points;
-            for (int i = 0; i < CurrentPointCount; ++i)
-                if (Math.Abs(points[i].X - clickPoint.X) <= RectangleWidth / 2 &&
-                    Math.Abs(points[i].Y - clickPoint.Y) <= RectangleWidth / 2)
-                {
-                    DeletePoint(i);
-                    return true;
-                }
+            int closePointIndex = _polygons[_selectedPolygonIndex].CheckIfNextToExistingPoint(clickPoint);
+            if (closePointIndex < 0)
+                return false;
 
-            return false;
+            _polygons[_selectedPolygonIndex].DeletePoint(closePointIndex);
+            return true;
         }
 
         private void Redraw()
         {
-            _formDrawer.Redraw(CurrentPointCount, MaxSizes, VerticalHorizontals, Points, _mainBitmap,
-                _selectedPointIndex);
-            pictureBox1.Refresh();
-        }
-
-        private void DeletePoint(int index)
-        {
-            var points = Points;
-            var maxSizes = MaxSizes;
-            for (int j = index + 1; j < CurrentPointCount; j++)
-            {
-                points[j - 1] = points[j];
-                maxSizes[j - 1] = maxSizes[j];
-            }
-
-            CurrentPointCount--;
-            Realign(0);
+            _formDrawer.Redraw(_polygons, _mainBitmap, _polygons[_selectedPolygonIndex].GetPoint(_selectedPointIndex), PolygonCount);
+            pictureBox.Refresh();
         }
 
         private void CheckAndHandleNextToEdge(Point clickPoint)
         {
-            var currentPointCount = CurrentPointCount;
-            var points = Points;
-            for (var i = 0; i < currentPointCount; i++)
-            {
-                int shortDist =
-                    _basicCalculator.ShortestDistanceFromSegment(points[i], points[(i + 1) % currentPointCount],
-                        clickPoint);
+            var edgeIndex = _polygons[_selectedPolygonIndex].CheckIfNextToExistingEdge(clickPoint);
+            if (edgeIndex < 0)
+                return;
 
-                if (shortDist <= MinimumDistance)
-                {
-                    ShowRightClickMenuForEdge(i, clickPoint);
-                    return;
-                }
-            }
+            ShowRightClickMenuForEdge(edgeIndex, clickPoint);
         }
 
         private void ShowRightClickMenuForEdge(int edgeIndex, Point clickPoint)
         {
-            _rightClickedLineIndex = edgeIndex;
-            verticalRelationControl.Checked = VerticalHorizontals[edgeIndex] == VH.Vertical;
-            horizontalRelationControl.Checked = VerticalHorizontals[edgeIndex] == VH.Horizontal;
+            _selectedLineIndex = edgeIndex;
+            _polygons[_selectedPolygonIndex].GetRelations(edgeIndex, out VH verticalHorizontal, out int maxSize, out int currentDistance);
+            verticalRelationControl.Checked = verticalHorizontal == VH.Vertical;
+            horizontalRelationControl.Checked = verticalHorizontal == VH.Horizontal;
 
-            if (MaxSizes[edgeIndex] > 0)
+            if (maxSize > 0)
             {
-                constLengthTextBox.Text = MaxSizes[edgeIndex].ToString();
+                constLengthTextBox.Text = maxSize.ToString();
                 constantLengthRelationControl.Checked = true;
             }
             else
             {
-                constLengthTextBox.Text = _basicCalculator
-                    .EuclideanDistance(Points[edgeIndex], Points[(edgeIndex + 1) % CurrentPointCount]).ToString();
-
+                constLengthTextBox.Text = currentDistance.ToString();
                 constantLengthRelationControl.Checked = false;
             }
-
-            rightClickMenu.Show(pictureBox1, clickPoint);
-            Realign(edgeIndex);
+            rightClickMenu.Show(pictureBox, clickPoint);
         }
 
-        //Jeśli jest zaznaczony punkt to go odznaczamy, umieszczmy w tablicy i odświeżamy wygląd, jeśli nie to szukamy punktu do zaznaczenia
         private void HandleLeftClick(Point clickPoint)
         {
-            var points = Points;
             if (_selectedPointIndex != -1)
-            {
-                points[_selectedPointIndex] = clickPoint;
-                Realign(_selectedPointIndex);
                 _selectedPointIndex = -1;
-            }
             else
-            {
-                for (int i = 0; i < CurrentPointCount; i++)
-                    if (Math.Abs(points[i].X - clickPoint.X) <= RectangleWidth / 2 &&
-                        Math.Abs(points[i].Y - clickPoint.Y) <= RectangleWidth / 2)
-                    {
-                        _selectedPointIndex = i;
-                        break;
-                    }
-            }
-            Redraw();
-        }
+                _selectedPointIndex = _polygons[_selectedPolygonIndex].CheckIfNextToExistingPoint(clickPoint);
 
-        private void Realign(int startingIndex)
-        {
-            _positionCalculator.CalculatePointsPosition(Points, VerticalHorizontals, MaxSizes, startingIndex,
-                CurrentPointCount);
             Redraw();
         }
     }

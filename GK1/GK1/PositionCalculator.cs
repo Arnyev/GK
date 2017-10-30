@@ -104,7 +104,7 @@ namespace GK1
         }
     }
 
-    internal enum VH
+    public enum VH
     {
         None = 0,
         Vertical = 1,

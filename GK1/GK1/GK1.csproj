@@ -57,7 +57,7 @@
     <Compile Include="MatrixCalculationHelper.cs" />
     <Compile Include="NewtonRaphsonEquationSolver.cs" />
     <Compile Include="NewtonRaphsonPositionCalculator.cs" />
-    <Compile Include="PointsDataProvider.cs" />
+    <Compile Include="PolygonData.cs" />
     <Compile Include="PositionCalculator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

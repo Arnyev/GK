@@ -2,7 +2,7 @@
 
 namespace GK1
 {
-    internal static class BresenhamCalculator
+    internal static class BresenhamDrawer
     {
         private static readonly Color Color = Color.Black;
 

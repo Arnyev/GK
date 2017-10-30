@@ -29,24 +29,26 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.pictureBox = new System.Windows.Forms.PictureBox();
             this.rightClickMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.constantLengthRelationControl = new System.Windows.Forms.ToolStripMenuItem();
             this.constLengthTextBox = new System.Windows.Forms.ToolStripTextBox();
             this.verticalRelationControl = new System.Windows.Forms.ToolStripMenuItem();
             this.horizontalRelationControl = new System.Windows.Forms.ToolStripMenuItem();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.saveButton = new System.Windows.Forms.Button();
+            this.loadButton = new System.Windows.Forms.Button();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.rightClickMenu.SuspendLayout();
             this.SuspendLayout();
             // 
-            // pictureBox1
+            // pictureBox
             // 
-            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pictureBox1.Location = new System.Drawing.Point(0, 0);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(1308, 534);
-            this.pictureBox1.TabIndex = 0;
-            this.pictureBox1.TabStop = false;
+            this.pictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pictureBox.Location = new System.Drawing.Point(0, 46);
+            this.pictureBox.Name = "pictureBox";
+            this.pictureBox.Size = new System.Drawing.Size(1308, 488);
+            this.pictureBox.TabIndex = 0;
+            this.pictureBox.TabStop = false;
             // 
             // rightClickMenu
             // 
@@ -55,7 +57,7 @@
             this.verticalRelationControl,
             this.horizontalRelationControl});
             this.rightClickMenu.Name = "rightClickMenu";
-            this.rightClickMenu.Size = new System.Drawing.Size(163, 92);
+            this.rightClickMenu.Size = new System.Drawing.Size(163, 70);
             // 
             // constantLengthRelationControl
             // 
@@ -82,15 +84,37 @@
             this.horizontalRelationControl.Size = new System.Drawing.Size(162, 22);
             this.horizontalRelationControl.Text = "Horizontal";
             // 
-            // Form1
+            // saveButton
+            // 
+            this.saveButton.Dock = System.Windows.Forms.DockStyle.Top;
+            this.saveButton.Location = new System.Drawing.Point(0, 0);
+            this.saveButton.Name = "saveButton";
+            this.saveButton.Size = new System.Drawing.Size(1308, 23);
+            this.saveButton.TabIndex = 1;
+            this.saveButton.Text = "Zapisz";
+            this.saveButton.UseVisualStyleBackColor = true;
+            // 
+            // loadButton
+            // 
+            this.loadButton.Dock = System.Windows.Forms.DockStyle.Top;
+            this.loadButton.Location = new System.Drawing.Point(0, 23);
+            this.loadButton.Name = "loadButton";
+            this.loadButton.Size = new System.Drawing.Size(1308, 23);
+            this.loadButton.TabIndex = 2;
+            this.loadButton.Text = "Wczytaj";
+            this.loadButton.UseVisualStyleBackColor = true;
+            // 
+            // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1308, 534);
-            this.Controls.Add(this.pictureBox1);
-            this.Name = "Form1";
+            this.Controls.Add(this.pictureBox);
+            this.Controls.Add(this.loadButton);
+            this.Controls.Add(this.saveButton);
+            this.Name = "MainForm";
             this.Text = "Form1";
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
             this.rightClickMenu.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -98,12 +122,14 @@
 
         #endregion
 
-        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.PictureBox pictureBox;
         private System.Windows.Forms.ContextMenuStrip rightClickMenu;
         private System.Windows.Forms.ToolStripMenuItem constantLengthRelationControl;
         private System.Windows.Forms.ToolStripMenuItem verticalRelationControl;
         private System.Windows.Forms.ToolStripMenuItem horizontalRelationControl;
         private System.Windows.Forms.ToolStripTextBox constLengthTextBox;
+        private System.Windows.Forms.Button saveButton;
+        private System.Windows.Forms.Button loadButton;
     }
 }
 
