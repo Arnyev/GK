@@ -18,7 +18,7 @@ namespace GK1
         private int _selectedLineIndex;
         private int _selectedPointIndex = -1;
         private Point _currentMousePoint;
-
+        private UsageData _usageData = new UsageData();
         private IPolygonData CurrentPolygon => _polygons[_selectedPolygonIndex];
 
         public MainForm()
@@ -128,7 +128,7 @@ namespace GK1
             }
 
             else if (_selectedPointIndex != -1)
-                CurrentPolygon.MovePoint(_selectedPointIndex, new Point(e.X, e.Y));
+                CurrentPolygon.MovePoint(_selectedPointIndex, new Point(e.X, e.Y), _usageData);
 
             Redraw();
         }
@@ -188,7 +188,7 @@ namespace GK1
         private void Redraw()
         {
             _formDrawer.Redraw(_polygons, _mainBitmap, CurrentPolygon.GetPoint(_selectedPointIndex),
-                PolygonCount);
+                PolygonCount, _usageData);
             pictureBox.Refresh();
         }
 

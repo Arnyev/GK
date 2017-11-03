@@ -12,18 +12,18 @@ namespace GK1
     internal interface IPositionCalculator
     {
         void CalculatePointsPosition(Point[] points, VH[] verticalHorizontals, int[] maxSizes, int startingIndex,
-            int pointsCount);
+            int pointsCount, UsageData usageData);
     }
 
     internal interface IFormDrawer
     {
-        void Redraw(IPolygonData[] polygonData, Bitmap bitmap, Point selectedPoint, int polygonCount);
+        void Redraw(IPolygonData[] polygonData, Bitmap bitmap, Point selectedPoint, int polygonCount, UsageData usageData);
     }
 
     public interface IPolygonData
     {
         void MovePolygon(int dx, int dy);
-        void MovePoint(int index, Point newPosition);
+        void MovePoint(int index, Point newPosition, UsageData errorCount);
         void ChangeRelation(int index, VH newRelation);
         void Realign(int startingIndex);
         bool ChangeMaxSize(int index, int newMaxSize);

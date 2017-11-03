@@ -22,12 +22,19 @@ namespace GK1
             "Przytrzymaj m aby ruszyć aktywny wielokąt";
 
 
-        public void Redraw(IPolygonData[] polygonData, Bitmap bitmap, Point selectedPoint, int polygonCount)
+        public void Redraw(IPolygonData[] polygonData, Bitmap bitmap, Point selectedPoint, int polygonCount, UsageData usageData)
         {
             using (var graphics = Graphics.FromImage(bitmap))
             {
                 graphics.Clear(Color.White);
                 graphics.DrawString(Instructions, new Font("Arial", 10), _drawBrush, new Point(3, 3));
+                graphics.DrawString("Ilość obliczeń: " + usageData.CalculationCount, new Font("Arial", 10), _drawBrush,
+                    new Point(bitmap.Width - 130, bitmap.Height - 60));
+                graphics.DrawString("Ilość iteracji: " + usageData.IterationCount, new Font("Arial", 10), _drawBrush,
+                    new Point(bitmap.Width - 130, bitmap.Height - 40));
+                graphics.DrawString("Ilość błędów: " + usageData.ErrorCount, new Font("Arial", 10), _drawBrush,
+                    new Point(bitmap.Width - 130, bitmap.Height - 20));
+
                 for (int j = 0; j < polygonCount; j++)
                 {
                     polygonData[j].GetData(out Point[] points, out VH[] verticalsHorizontals, out int[] maxSizes,
@@ -58,12 +65,13 @@ namespace GK1
                 graphics.DrawString(maxSize.ToString(), _drawFont, _drawBrush,
                     new Point((p1.X + p2.X) / 2, (p1.Y + p2.Y) / 2));
 
-            else if (verticalHorizontal == VH.Horizontal)
+            if (verticalHorizontal == VH.Horizontal)
                 graphics.DrawString("Horizontal", _drawFont, _drawBrush,
-                    new Point((p1.X + p2.X) / 2, (p1.Y + p2.Y) / 2));
+                    new Point((p1.X + p2.X) / 2, (p1.Y + p2.Y) / 2 - 30));
 
-            else if (verticalHorizontal == VH.Vertical)
-                graphics.DrawString("Vertical", _drawFont, _drawBrush, new Point((p1.X + p2.X) / 2, (p1.Y + p2.Y) / 2));
+            if (verticalHorizontal == VH.Vertical)
+                graphics.DrawString("Vertical", _drawFont, _drawBrush,
+                    new Point((p1.X + p2.X) / 2, (p1.Y + p2.Y) / 2 - 30));
         }
     }
 }

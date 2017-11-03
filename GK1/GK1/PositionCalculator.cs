@@ -13,7 +13,7 @@ namespace GK1
         }
 
         public void CalculatePointsPosition(Point[] points, VH[] verticalHorizontals,
-            int[] maxSizes, int startingIndex, int pointsCount)
+            int[] maxSizes, int startingIndex, int pointsCount, UsageData usageData)
         {
             _basicCalculator.CheckLengths(maxSizes, pointsCount);
 

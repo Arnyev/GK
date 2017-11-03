@@ -7,7 +7,6 @@ namespace GK1
     public class PolygonData : IPolygonData
     {
         public const int MaxPoints = 100;
-        private Point _lastMovePosition;
         private VH[] _verticalHorizontals;
         private int[] _maxSizes;
         private Point[] _points;
@@ -19,13 +18,13 @@ namespace GK1
         internal PolygonData(int minimumDistance)
         {
             _minimumDistance = minimumDistance;
-            _lastMovePosition = new Point(-1, -1);
             _currentPointCount = 0;
             _maxSizes = new int[MaxPoints];
             _points = new Point[MaxPoints];
             _verticalHorizontals = new VH[MaxPoints];
             _basicCalculator = new BasicCalculator();
-            _positionCalculator = new PositionCalculator(_basicCalculator);
+            _positionCalculator =
+                new NewtonRaphsonPositionCalculator(new NewtonRaphsonEquationSolver(new MatrixCalculationHelper()));
         }
 
         public void ChangeRelation(int index, VH newRelation)
@@ -46,10 +45,10 @@ namespace GK1
             Realign(index);
         }
 
-        public void MovePoint(int index, Point newPosition)
+        public void MovePoint(int index, Point newPosition, UsageData errorCount)
         {
             _points[index] = newPosition;
-            Realign(index);
+            Realign(index, errorCount);
         }
 
         public void MovePolygon(int dx, int dy)
@@ -60,8 +59,15 @@ namespace GK1
 
         public void Realign(int startingIndex)
         {
+            UsageData usageData = new UsageData();
             _positionCalculator.CalculatePointsPosition(_points, _verticalHorizontals, _maxSizes, startingIndex,
-                _currentPointCount);
+                _currentPointCount, usageData);
+        }
+
+        public void Realign(int startingIndex, UsageData errorCount)
+        {
+            _positionCalculator.CalculatePointsPosition(_points, _verticalHorizontals, _maxSizes, startingIndex,
+                _currentPointCount, errorCount);
         }
 
         public bool ChangeMaxSize(int index, int newMaxSize)
