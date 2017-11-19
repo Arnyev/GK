@@ -4,21 +4,21 @@ using System.Drawing;
 
 namespace GK1
 {
-    public class PolygonFiller:IPolygonFiller
+    public interface IPolygonFiller
     {
-        public static readonly Color FillColor = Color.FromArgb(0, 0, 100);
-        private static readonly Pen Pen = new Pen(FillColor);
+        void FillPolygon(DirectBitmap bitmap, Point[] points);
+    }
 
-        private PointColorCalculator _pointColorCalculator;
+    public class PolygonFiller : IPolygonFiller
+    {
+        private readonly IPointColorCalculator _pointColorCalculator;
 
-        public PolygonFiller(PointColorCalculator pointColorCalculator)
+        public PolygonFiller(IPointColorCalculator pointColorCalculator)
         {
             _pointColorCalculator = pointColorCalculator;
-            Bitmap image1 = (Bitmap)Image.FromFile(@"C:\Documents and Settings\Artur\Desktop\Untitled.png", true);
-            _pointColorCalculator.RefreshVectorNoBump(image1);
         }
 
-        public void FillPolygon(Graphics graphics,DirectBitmap bitmap, Point[] points, Color color)
+        public void FillPolygon(DirectBitmap bitmap, Point[] points)
         {
             if (points.Length < 3)
                 return;
@@ -47,7 +47,7 @@ namespace GK1
                         UpdateActiveLines(indexes[i], y, edgesTo, edgesFrom, AET);
                 }
 
-                FillScanLine(AET, graphics, bitmap, y, color);
+                FillScanLine(AET, bitmap, y);
             }
         }
 
@@ -57,12 +57,12 @@ namespace GK1
             for (int i = 0; i < points.Length; i++)
                 indexes[i] = i;
 
-            var pointsCopy = (Point[])points.Clone();
+            var pointsCopy = (Point[]) points.Clone();
 
             Array.Sort(pointsCopy, indexes, new PointYComparer());
         }
 
-        private static void UpdateActiveLines(int index, int y, Edge[] edgesTo,Edge[] edgesFrom, List<Edge> AET)
+        private static void UpdateActiveLines(int index, int y, Edge[] edgesTo, Edge[] edgesFrom, List<Edge> AET)
         {
             if (edgesTo[index].YMax > y - 1)
                 AET.Add(edgesTo[index]);
@@ -101,7 +101,7 @@ namespace GK1
             }
         }
 
-        private  void FillScanLine(List<Edge> AET, Graphics graphics,DirectBitmap bitmap, int y, Color color)
+        private void FillScanLine(List<Edge> AET, DirectBitmap bitmap, int y)
         {
             var intersections = new int[AET.Count];
             for (int j = 0; j < AET.Count; j++)
@@ -119,7 +119,7 @@ namespace GK1
 
                 for (int j = startPoint; j < endPoint; j++)
                 {
-                    var newColor = _pointColorCalculator.GetPixelColor(color, j, y);
+                    var newColor = _pointColorCalculator.GetPixelColor(j, y);
                     bitmap.SetPixel(j, y, newColor);
                 }
             }

@@ -28,6 +28,14 @@ namespace GK1
             Bitmap = new Bitmap(width, height, width * 4, PixelFormat.Format32bppArgb, BitsHandle.AddrOfPinnedObject());
         }
 
+        public DirectBitmap(Bitmap bitmap) : this(bitmap.Width, bitmap.Height)
+        {
+            using (var graphics = Graphics.FromImage(Bitmap))
+            {
+                graphics.DrawImage(bitmap, new Point(0, 0));
+            }
+        }
+
         public void Dispose()
         {
             if (Disposed) return;
@@ -42,6 +50,12 @@ namespace GK1
             Bits[index] = color.B;
             Bits[index + 1] = color.G;
             Bits[index + 2] = color.R;
+        }
+
+        public MyColor GetPixel(int x, int y)
+        {
+            var index = (y * Width + x) * 4;
+            return new MyColor(Bits[index + 2], Bits[index + 1], Bits[index]);
         }
     }
 }

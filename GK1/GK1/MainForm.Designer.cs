@@ -38,18 +38,57 @@ namespace GK1
             this.constLengthTextBox = new System.Windows.Forms.ToolStripTextBox();
             this.verticalRelationControl = new System.Windows.Forms.ToolStripMenuItem();
             this.horizontalRelationControl = new System.Windows.Forms.ToolStripMenuItem();
-            this.saveButton = new System.Windows.Forms.Button();
-            this.loadButton = new System.Windows.Forms.Button();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
+            this.label9 = new System.Windows.Forms.Label();
+            this.moveLightConstRadioButton = new System.Windows.Forms.RadioButton();
+            this.moveLightMovingRadioButton = new System.Windows.Forms.RadioButton();
+            this.moveLightTextBox = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
+            this.label7 = new System.Windows.Forms.Label();
+            this.bumpTextureBox = new System.Windows.Forms.PictureBox();
+            this.bumpTextureButton = new System.Windows.Forms.Button();
+            this.bumpNoneRadioButton = new System.Windows.Forms.RadioButton();
+            this.bumpTextureRadioButton = new System.Windows.Forms.RadioButton();
+            this.table = new System.Windows.Forms.TableLayoutPanel();
+            this.label5 = new System.Windows.Forms.Label();
+            this.vectorTextureBox = new System.Windows.Forms.PictureBox();
+            this.vectorTextureButton = new System.Windows.Forms.Button();
+            this.vectorConstRadioButton = new System.Windows.Forms.RadioButton();
+            this.vectorTextureRadioButton = new System.Windows.Forms.RadioButton();
+            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.lightColorButton = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.lightColorLabel = new System.Windows.Forms.Label();
+            this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+            this.label3 = new System.Windows.Forms.Label();
+            this.objectColorLabel = new System.Windows.Forms.Label();
+            this.objectTextureBox = new System.Windows.Forms.PictureBox();
+            this.objectColorButton = new System.Windows.Forms.Button();
+            this.objectTextureButton = new System.Windows.Forms.Button();
+            this.objectColorRadioButton = new System.Windows.Forms.RadioButton();
+            this.objectTextureRadioButton = new System.Windows.Forms.RadioButton();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.rightClickMenu.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
+            this.tableLayoutPanel6.SuspendLayout();
+            this.tableLayoutPanel5.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.bumpTextureBox)).BeginInit();
+            this.table.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.vectorTextureBox)).BeginInit();
+            this.tableLayoutPanel2.SuspendLayout();
+            this.tableLayoutPanel3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.objectTextureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // pictureBox
             // 
             this.pictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pictureBox.Location = new System.Drawing.Point(0, 46);
+            this.pictureBox.Location = new System.Drawing.Point(303, 3);
             this.pictureBox.Name = "pictureBox";
-            this.pictureBox.Size = new System.Drawing.Size(1308, 488);
+            this.tableLayoutPanel1.SetRowSpan(this.pictureBox, 5);
+            this.pictureBox.Size = new System.Drawing.Size(1002, 528);
             this.pictureBox.TabIndex = 0;
             this.pictureBox.TabStop = false;
             // 
@@ -87,38 +126,433 @@ namespace GK1
             this.horizontalRelationControl.Size = new System.Drawing.Size(162, 22);
             this.horizontalRelationControl.Text = "Horizontal";
             // 
-            // saveButton
+            // tableLayoutPanel1
             // 
-            this.saveButton.Dock = System.Windows.Forms.DockStyle.Top;
-            this.saveButton.Location = new System.Drawing.Point(0, 0);
-            this.saveButton.Name = "saveButton";
-            this.saveButton.Size = new System.Drawing.Size(1308, 23);
-            this.saveButton.TabIndex = 1;
-            this.saveButton.Text = "Zapisz";
-            this.saveButton.UseVisualStyleBackColor = true;
+            this.tableLayoutPanel1.ColumnCount = 2;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 300F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel6, 0, 4);
+            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel5, 0, 3);
+            this.tableLayoutPanel1.Controls.Add(this.table, 0, 2);
+            this.tableLayoutPanel1.Controls.Add(this.pictureBox, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel3, 0, 1);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 5;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 120F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1308, 534);
+            this.tableLayoutPanel1.TabIndex = 1;
             // 
-            // loadButton
+            // tableLayoutPanel6
             // 
-            this.loadButton.Dock = System.Windows.Forms.DockStyle.Top;
-            this.loadButton.Location = new System.Drawing.Point(0, 23);
-            this.loadButton.Name = "loadButton";
-            this.loadButton.Size = new System.Drawing.Size(1308, 23);
-            this.loadButton.TabIndex = 2;
-            this.loadButton.Text = "Wczytaj";
-            this.loadButton.UseVisualStyleBackColor = true;
+            this.tableLayoutPanel6.ColumnCount = 2;
+            this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel6.Controls.Add(this.label9, 0, 0);
+            this.tableLayoutPanel6.Controls.Add(this.moveLightConstRadioButton, 0, 1);
+            this.tableLayoutPanel6.Controls.Add(this.moveLightMovingRadioButton, 0, 2);
+            this.tableLayoutPanel6.Controls.Add(this.moveLightTextBox, 1, 2);
+            this.tableLayoutPanel6.Controls.Add(this.label6, 1, 1);
+            this.tableLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel6.Location = new System.Drawing.Point(3, 416);
+            this.tableLayoutPanel6.Name = "tableLayoutPanel6";
+            this.tableLayoutPanel6.RowCount = 3;
+            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel6.Size = new System.Drawing.Size(294, 115);
+            this.tableLayoutPanel6.TabIndex = 5;
+            // 
+            // label9
+            // 
+            this.label9.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.label9.AutoSize = true;
+            this.tableLayoutPanel6.SetColumnSpan(this.label9, 2);
+            this.label9.Location = new System.Drawing.Point(3, 3);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(112, 13);
+            this.label9.TabIndex = 0;
+            this.label9.Text = "Wektor źródła światła";
+            // 
+            // moveLightConstRadioButton
+            // 
+            this.moveLightConstRadioButton.AutoSize = true;
+            this.moveLightConstRadioButton.Location = new System.Drawing.Point(3, 23);
+            this.moveLightConstRadioButton.Name = "moveLightConstRadioButton";
+            this.moveLightConstRadioButton.Size = new System.Drawing.Size(83, 17);
+            this.moveLightConstRadioButton.TabIndex = 5;
+            this.moveLightConstRadioButton.TabStop = true;
+            this.moveLightConstRadioButton.Text = "Stały [0,0,1]";
+            this.moveLightConstRadioButton.UseVisualStyleBackColor = true;
+            // 
+            // moveLightMovingRadioButton
+            // 
+            this.moveLightMovingRadioButton.AutoSize = true;
+            this.moveLightMovingRadioButton.Location = new System.Drawing.Point(3, 53);
+            this.moveLightMovingRadioButton.Name = "moveLightMovingRadioButton";
+            this.moveLightMovingRadioButton.Size = new System.Drawing.Size(125, 17);
+            this.moveLightMovingRadioButton.TabIndex = 6;
+            this.moveLightMovingRadioButton.TabStop = true;
+            this.moveLightMovingRadioButton.Text = "Animowany po sferze";
+            this.moveLightMovingRadioButton.UseVisualStyleBackColor = true;
+            // 
+            // moveLightTextBox
+            // 
+            this.moveLightTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.moveLightTextBox.Location = new System.Drawing.Point(150, 53);
+            this.moveLightTextBox.Name = "moveLightTextBox";
+            this.moveLightTextBox.Size = new System.Drawing.Size(141, 20);
+            this.moveLightTextBox.TabIndex = 7;
+            // 
+            // label6
+            // 
+            this.label6.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(184, 28);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(73, 13);
+            this.label6.TabIndex = 8;
+            this.label6.Text = "Promień sfery:";
+            // 
+            // tableLayoutPanel5
+            // 
+            this.tableLayoutPanel5.ColumnCount = 3;
+            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel5.Controls.Add(this.label7, 0, 0);
+            this.tableLayoutPanel5.Controls.Add(this.bumpTextureBox, 1, 2);
+            this.tableLayoutPanel5.Controls.Add(this.bumpTextureButton, 2, 2);
+            this.tableLayoutPanel5.Controls.Add(this.bumpNoneRadioButton, 0, 1);
+            this.tableLayoutPanel5.Controls.Add(this.bumpTextureRadioButton, 0, 2);
+            this.tableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel5.Location = new System.Drawing.Point(3, 295);
+            this.tableLayoutPanel5.Name = "tableLayoutPanel5";
+            this.tableLayoutPanel5.RowCount = 3;
+            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel5.Size = new System.Drawing.Size(294, 115);
+            this.tableLayoutPanel5.TabIndex = 4;
+            // 
+            // label7
+            // 
+            this.label7.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.label7.AutoSize = true;
+            this.tableLayoutPanel5.SetColumnSpan(this.label7, 3);
+            this.label7.Location = new System.Drawing.Point(3, 3);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(60, 13);
+            this.label7.TabIndex = 0;
+            this.label7.Text = "Zaburzenie";
+            // 
+            // bumpTextureBox
+            // 
+            this.bumpTextureBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bumpTextureBox.Location = new System.Drawing.Point(73, 50);
+            this.bumpTextureBox.Margin = new System.Windows.Forms.Padding(0);
+            this.bumpTextureBox.Name = "bumpTextureBox";
+            this.bumpTextureBox.Size = new System.Drawing.Size(147, 65);
+            this.bumpTextureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.bumpTextureBox.TabIndex = 2;
+            this.bumpTextureBox.TabStop = false;
+            // 
+            // bumpTextureButton
+            // 
+            this.bumpTextureButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.bumpTextureButton.Location = new System.Drawing.Point(220, 50);
+            this.bumpTextureButton.Margin = new System.Windows.Forms.Padding(0);
+            this.bumpTextureButton.Name = "bumpTextureButton";
+            this.bumpTextureButton.Size = new System.Drawing.Size(74, 30);
+            this.bumpTextureButton.TabIndex = 4;
+            this.bumpTextureButton.Text = "Zmień";
+            this.bumpTextureButton.UseVisualStyleBackColor = true;
+            // 
+            // bumpNoneRadioButton
+            // 
+            this.bumpNoneRadioButton.AutoSize = true;
+            this.bumpNoneRadioButton.Location = new System.Drawing.Point(3, 23);
+            this.bumpNoneRadioButton.Name = "bumpNoneRadioButton";
+            this.bumpNoneRadioButton.Size = new System.Drawing.Size(67, 17);
+            this.bumpNoneRadioButton.TabIndex = 5;
+            this.bumpNoneRadioButton.TabStop = true;
+            this.bumpNoneRadioButton.Text = "Brak [0,0,0]";
+            this.bumpNoneRadioButton.UseVisualStyleBackColor = true;
+            // 
+            // bumpTextureRadioButton
+            // 
+            this.bumpTextureRadioButton.AutoSize = true;
+            this.bumpTextureRadioButton.Location = new System.Drawing.Point(3, 53);
+            this.bumpTextureRadioButton.Name = "bumpTextureRadioButton";
+            this.bumpTextureRadioButton.Size = new System.Drawing.Size(67, 17);
+            this.bumpTextureRadioButton.TabIndex = 6;
+            this.bumpTextureRadioButton.TabStop = true;
+            this.bumpTextureRadioButton.Text = "Tekstura";
+            this.bumpTextureRadioButton.UseVisualStyleBackColor = true;
+            // 
+            // table
+            // 
+            this.table.ColumnCount = 3;
+            this.table.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.table.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.table.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.table.Controls.Add(this.label5, 0, 0);
+            this.table.Controls.Add(this.vectorTextureBox, 1, 2);
+            this.table.Controls.Add(this.vectorTextureButton, 2, 2);
+            this.table.Controls.Add(this.vectorConstRadioButton, 0, 1);
+            this.table.Controls.Add(this.vectorTextureRadioButton, 0, 2);
+            this.table.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.table.Location = new System.Drawing.Point(3, 174);
+            this.table.Name = "table";
+            this.table.RowCount = 3;
+            this.table.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.table.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.table.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.table.Size = new System.Drawing.Size(294, 115);
+            this.table.TabIndex = 3;
+            // 
+            // label5
+            // 
+            this.label5.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.label5.AutoSize = true;
+            this.table.SetColumnSpan(this.label5, 3);
+            this.label5.Location = new System.Drawing.Point(3, 3);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(87, 13);
+            this.label5.TabIndex = 0;
+            this.label5.Text = "Wektor normalny";
+            // 
+            // vectorTextureBox
+            // 
+            this.vectorTextureBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.vectorTextureBox.Location = new System.Drawing.Point(73, 50);
+            this.vectorTextureBox.Margin = new System.Windows.Forms.Padding(0);
+            this.vectorTextureBox.Name = "vectorTextureBox";
+            this.vectorTextureBox.Size = new System.Drawing.Size(147, 65);
+            this.vectorTextureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.vectorTextureBox.TabIndex = 2;
+            this.vectorTextureBox.TabStop = false;
+            // 
+            // vectorTextureButton
+            // 
+            this.vectorTextureButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.vectorTextureButton.Location = new System.Drawing.Point(220, 50);
+            this.vectorTextureButton.Margin = new System.Windows.Forms.Padding(0);
+            this.vectorTextureButton.Name = "vectorTextureButton";
+            this.vectorTextureButton.Size = new System.Drawing.Size(74, 30);
+            this.vectorTextureButton.TabIndex = 4;
+            this.vectorTextureButton.Text = "Zmień";
+            this.vectorTextureButton.UseVisualStyleBackColor = true;
+            // 
+            // vectorConstRadioButton
+            // 
+            this.vectorConstRadioButton.AutoSize = true;
+            this.table.SetColumnSpan(this.vectorConstRadioButton, 3);
+            this.vectorConstRadioButton.Location = new System.Drawing.Point(3, 23);
+            this.vectorConstRadioButton.Name = "vectorConstRadioButton";
+            this.vectorConstRadioButton.Size = new System.Drawing.Size(83, 17);
+            this.vectorConstRadioButton.TabIndex = 5;
+            this.vectorConstRadioButton.TabStop = true;
+            this.vectorConstRadioButton.Text = "Stały [0,0,1]";
+            this.vectorConstRadioButton.UseVisualStyleBackColor = true;
+            // 
+            // vectorTextureRadioButton
+            // 
+            this.vectorTextureRadioButton.AutoSize = true;
+            this.vectorTextureRadioButton.Location = new System.Drawing.Point(3, 53);
+            this.vectorTextureRadioButton.Name = "vectorTextureRadioButton";
+            this.vectorTextureRadioButton.Size = new System.Drawing.Size(67, 17);
+            this.vectorTextureRadioButton.TabIndex = 6;
+            this.vectorTextureRadioButton.TabStop = true;
+            this.vectorTextureRadioButton.Text = "Tekstura";
+            this.vectorTextureRadioButton.UseVisualStyleBackColor = true;
+            // 
+            // tableLayoutPanel2
+            // 
+            this.tableLayoutPanel2.ColumnCount = 3;
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel2.Controls.Add(this.lightColorButton, 2, 0);
+            this.tableLayoutPanel2.Controls.Add(this.label1, 0, 0);
+            this.tableLayoutPanel2.Controls.Add(this.lightColorLabel, 1, 0);
+            this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 3);
+            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+            this.tableLayoutPanel2.RowCount = 1;
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(294, 44);
+            this.tableLayoutPanel2.TabIndex = 1;
+            // 
+            // lightColorButton
+            // 
+            this.lightColorButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lightColorButton.Location = new System.Drawing.Point(220, 0);
+            this.lightColorButton.Margin = new System.Windows.Forms.Padding(0);
+            this.lightColorButton.Name = "lightColorButton";
+            this.lightColorButton.Size = new System.Drawing.Size(74, 30);
+            this.lightColorButton.TabIndex = 4;
+            this.lightColorButton.Text = "Zmień";
+            this.lightColorButton.UseVisualStyleBackColor = true;
+            // 
+            // label1
+            // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(3, 13);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(67, 26);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Kolor źródła światła";
+            // 
+            // lightColorLabel
+            // 
+            this.lightColorLabel.AutoSize = true;
+            this.lightColorLabel.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.lightColorLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lightColorLabel.Location = new System.Drawing.Point(73, 0);
+            this.lightColorLabel.Margin = new System.Windows.Forms.Padding(0);
+            this.lightColorLabel.Name = "lightColorLabel";
+            this.lightColorLabel.Size = new System.Drawing.Size(147, 53);
+            this.lightColorLabel.TabIndex = 1;
+            // 
+            // tableLayoutPanel3
+            // 
+            this.tableLayoutPanel3.ColumnCount = 3;
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel3.Controls.Add(this.label3, 0, 0);
+            this.tableLayoutPanel3.Controls.Add(this.objectColorLabel, 1, 1);
+            this.tableLayoutPanel3.Controls.Add(this.objectTextureBox, 1, 2);
+            this.tableLayoutPanel3.Controls.Add(this.objectColorButton, 2, 1);
+            this.tableLayoutPanel3.Controls.Add(this.objectTextureButton, 2, 2);
+            this.tableLayoutPanel3.Controls.Add(this.objectColorRadioButton, 0, 1);
+            this.tableLayoutPanel3.Controls.Add(this.objectTextureRadioButton, 0, 2);
+            this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 53);
+            this.tableLayoutPanel3.Name = "tableLayoutPanel3";
+            this.tableLayoutPanel3.RowCount = 3;
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(294, 115);
+            this.tableLayoutPanel3.TabIndex = 2;
+            // 
+            // label3
+            // 
+            this.label3.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.label3.AutoSize = true;
+            this.tableLayoutPanel3.SetColumnSpan(this.label3, 3);
+            this.label3.Location = new System.Drawing.Point(3, 3);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(69, 13);
+            this.label3.TabIndex = 0;
+            this.label3.Text = "Kolor obiektu";
+            // 
+            // objectColorLabel
+            // 
+            this.objectColorLabel.AutoSize = true;
+            this.objectColorLabel.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.objectColorLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.objectColorLabel.Location = new System.Drawing.Point(73, 20);
+            this.objectColorLabel.Margin = new System.Windows.Forms.Padding(0);
+            this.objectColorLabel.Name = "objectColorLabel";
+            this.objectColorLabel.Size = new System.Drawing.Size(147, 30);
+            this.objectColorLabel.TabIndex = 1;
+            // 
+            // objectTextureBox
+            // 
+            this.objectTextureBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.objectTextureBox.Location = new System.Drawing.Point(73, 50);
+            this.objectTextureBox.Margin = new System.Windows.Forms.Padding(0);
+            this.objectTextureBox.Name = "objectTextureBox";
+            this.objectTextureBox.Size = new System.Drawing.Size(147, 81);
+            this.objectTextureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.objectTextureBox.TabIndex = 2;
+            this.objectTextureBox.TabStop = false;
+            // 
+            // objectColorButton
+            // 
+            this.objectColorButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.objectColorButton.Location = new System.Drawing.Point(220, 20);
+            this.objectColorButton.Margin = new System.Windows.Forms.Padding(0);
+            this.objectColorButton.Name = "objectColorButton";
+            this.objectColorButton.Size = new System.Drawing.Size(74, 30);
+            this.objectColorButton.TabIndex = 3;
+            this.objectColorButton.Text = "Zmień";
+            this.objectColorButton.UseVisualStyleBackColor = true;
+            // 
+            // objectTextureButton
+            // 
+            this.objectTextureButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.objectTextureButton.Location = new System.Drawing.Point(220, 50);
+            this.objectTextureButton.Margin = new System.Windows.Forms.Padding(0);
+            this.objectTextureButton.Name = "objectTextureButton";
+            this.objectTextureButton.Size = new System.Drawing.Size(74, 30);
+            this.objectTextureButton.TabIndex = 4;
+            this.objectTextureButton.Text = "Zmień";
+            this.objectTextureButton.UseVisualStyleBackColor = true;
+            // 
+            // objectColorRadioButton
+            // 
+            this.objectColorRadioButton.AutoSize = true;
+            this.objectColorRadioButton.Location = new System.Drawing.Point(3, 23);
+            this.objectColorRadioButton.Name = "objectColorRadioButton";
+            this.objectColorRadioButton.Size = new System.Drawing.Size(50, 17);
+            this.objectColorRadioButton.TabIndex = 5;
+            this.objectColorRadioButton.TabStop = true;
+            this.objectColorRadioButton.Text = "Stały";
+            this.objectColorRadioButton.UseVisualStyleBackColor = true;
+            // 
+            // objectTextureRadioButton
+            // 
+            this.objectTextureRadioButton.AutoSize = true;
+            this.objectTextureRadioButton.Location = new System.Drawing.Point(3, 53);
+            this.objectTextureRadioButton.Name = "objectTextureRadioButton";
+            this.objectTextureRadioButton.Size = new System.Drawing.Size(67, 17);
+            this.objectTextureRadioButton.TabIndex = 6;
+            this.objectTextureRadioButton.TabStop = true;
+            this.objectTextureRadioButton.Text = "Tekstura";
+            this.objectTextureRadioButton.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1308, 534);
-            this.Controls.Add(this.pictureBox);
-            this.Controls.Add(this.loadButton);
-            this.Controls.Add(this.saveButton);
+            this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "MainForm";
             this.Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
             this.rightClickMenu.ResumeLayout(false);
+            this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableLayoutPanel6.ResumeLayout(false);
+            this.tableLayoutPanel6.PerformLayout();
+            this.tableLayoutPanel5.ResumeLayout(false);
+            this.tableLayoutPanel5.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.bumpTextureBox)).EndInit();
+            this.table.ResumeLayout(false);
+            this.table.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.vectorTextureBox)).EndInit();
+            this.tableLayoutPanel2.ResumeLayout(false);
+            this.tableLayoutPanel2.PerformLayout();
+            this.tableLayoutPanel3.ResumeLayout(false);
+            this.tableLayoutPanel3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.objectTextureBox)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -131,8 +565,37 @@ namespace GK1
         private ToolStripMenuItem verticalRelationControl;
         private ToolStripMenuItem horizontalRelationControl;
         private ToolStripTextBox constLengthTextBox;
-        private Button saveButton;
-        private Button loadButton;
+        private TableLayoutPanel tableLayoutPanel1;
+        private TableLayoutPanel tableLayoutPanel2;
+        private Label label1;
+        private Label lightColorLabel;
+        private TableLayoutPanel tableLayoutPanel3;
+        private Label label3;
+        private Label objectColorLabel;
+        private PictureBox objectTextureBox;
+        private Button objectColorButton;
+        private Button objectTextureButton;
+        private RadioButton objectColorRadioButton;
+        private RadioButton objectTextureRadioButton;
+        private Button lightColorButton;
+        private TableLayoutPanel tableLayoutPanel6;
+        private Label label9;
+        private RadioButton moveLightConstRadioButton;
+        private RadioButton moveLightMovingRadioButton;
+        private TableLayoutPanel tableLayoutPanel5;
+        private Label label7;
+        private PictureBox bumpTextureBox;
+        private Button bumpTextureButton;
+        private RadioButton bumpNoneRadioButton;
+        private RadioButton bumpTextureRadioButton;
+        private TableLayoutPanel table;
+        private Label label5;
+        private PictureBox vectorTextureBox;
+        private Button vectorTextureButton;
+        private RadioButton vectorConstRadioButton;
+        private RadioButton vectorTextureRadioButton;
+        private TextBox moveLightTextBox;
+        private Label label6;
     }
 }
 

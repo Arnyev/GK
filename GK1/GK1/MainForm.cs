@@ -21,38 +21,154 @@ namespace GK1
         private UsageData _usageData = new UsageData();
         private IPolygonData CurrentPolygon => _polygons[_selectedPolygonIndex];
 
+        private IPointColorCalculator _pointColorCalculator;
+
         public MainForm()
         {
             InitializeComponent();
 
             pictureBox.MouseDoubleClick += (s, e) => CurrentPolygon.AddPoint(new Point(e.X, e.Y));
             pictureBox.MouseClick += PictureBox1_MouseClick;
-            constLengthTextBox.KeyPress += ConstLengthTextBoxKeyPress;
-            constLengthTextBox.LostFocus += ConstLengthTextBoxTextChanged;
-            constantLengthRelationControl.Click += ConstantLengthRelationControl_CheckedChanged;
-            verticalRelationControl.Click += RelationControlClick;
-            horizontalRelationControl.Click += RelationControlClick;
+
             KeyDown += Form1_KeyDown;
             KeyUp += Form1_KeyUp;
             Resize += Form1_Resize;
+            KeyPreview = true;
             pictureBox.MouseMove += Form1_MouseMove;
 
-            saveButton.Click += SaveButton_Click;
-            loadButton.Click += LoadButton_Click;
-
-            saveButton.KeyDown += Form1_KeyDown;
-            loadButton.KeyDown += Form1_KeyDown;
-
-            saveButton.KeyUp += Form1_KeyUp;
-            loadButton.KeyUp += Form1_KeyUp;
-
             _currentMousePoint = new Point(-1, -1);
+
             _mainBitmap = new DirectBitmap(pictureBox.Width, pictureBox.Height);
             pictureBox.Image = _mainBitmap.Bitmap;
+
             _polygons = new IPolygonData[PolygonCount];
             _polygons[0] = new PolygonData(MinimumDistance);
             _polygons[1] = new PolygonData(MinimumDistance);
-            _formDrawer = new FormDrawer(MinimumDistance, new PolygonFiller(new PointColorCalculator()), new WeilerAthertonCalculator());
+            _pointColorCalculator=new PointColorCalculator();
+
+            _formDrawer = new FormDrawer(MinimumDistance, new PolygonFiller(_pointColorCalculator),
+                new WeilerAthertonCalculator());
+
+            SetRigthPanelEvents();
+            SetTimerRedraw();
+            InitColorCalculatorAndControlsState();
+        }
+
+        private void SetRigthPanelEvents()
+        {
+            lightColorButton.Click += LightColorButton_Click;
+            objectColorButton.Click += ObjectColorButton_Click;
+
+            objectTextureButton.Click += ObjectTextureButton_Click;
+            vectorTextureButton.Click += VectorTextureButton_Click;
+            bumpTextureButton.Click += BumpTextureButton_Click;
+
+            objectColorRadioButton.CheckedChanged += (s, e) =>
+                _pointColorCalculator.ChangeUseImage(!objectColorRadioButton.Checked);
+
+            vectorConstRadioButton.CheckedChanged +=
+                (s, e) => _pointColorCalculator.ChangeUseMap(!vectorConstRadioButton.Checked);
+
+            bumpNoneRadioButton.CheckedChanged +=
+                (s, e) => _pointColorCalculator.ChangeUseBump(!bumpNoneRadioButton.Checked);
+
+            moveLightConstRadioButton.CheckedChanged += (s, e) =>
+                _pointColorCalculator.ChangeLightMoving(!moveLightConstRadioButton.Checked);
+        }
+
+        private void VectorTextureButton_Click(object sender, EventArgs e)
+        {
+            var bitmap = GetBitmapOpenFile();
+            if (bitmap != null)
+            {
+                _pointColorCalculator.LoadNormalMap(bitmap);
+                vectorTextureBox.Image = bitmap;
+            }
+        }
+
+        private void BumpTextureButton_Click(object sender, EventArgs e)
+        {
+            var bitmap = GetBitmapOpenFile();
+            if (bitmap != null)
+            {
+                _pointColorCalculator.LoadBumpMap(bitmap);
+                bumpTextureBox.Image = bitmap;
+            }
+        }
+
+        private void ObjectTextureButton_Click(object sender, EventArgs e)
+        {
+            var bitmap = GetBitmapOpenFile();
+            if (bitmap != null)
+            {
+                _pointColorCalculator.LoadImage(bitmap);
+                objectTextureBox.Image = bitmap;
+            }
+        }
+
+        private void SetTimerRedraw()
+        {
+            Timer timer = new Timer();
+            timer.Interval = 10;
+            timer.Tick += (s, e) => Redraw();
+            timer.Start();
+        }
+        private void InitColorCalculatorAndControlsState()
+        {
+            _pointColorCalculator.SetObjectColor(objectColorLabel.BackColor);
+            _pointColorCalculator.SetLightColor(lightColorLabel.BackColor);
+
+            _pointColorCalculator.ChangeUseImage(false);
+            objectColorRadioButton.Checked = true;
+
+            _pointColorCalculator.ChangeUseMap(false);
+            vectorConstRadioButton.Checked = true;
+
+            _pointColorCalculator.ChangeUseBump(false);
+            bumpNoneRadioButton.Checked = true;
+
+            _pointColorCalculator.ChangeLightMoving(false);
+            moveLightConstRadioButton.Checked = true;
+        }
+
+        private void ObjectColorButton_Click(object sender, EventArgs e)
+        {
+            var color = GetColorFromWindow(objectColorLabel.BackColor);
+            objectColorLabel.BackColor = color;
+            _pointColorCalculator.SetObjectColor(color);
+        }
+
+        private void LightColorButton_Click(object sender, EventArgs e)
+        {
+            var color= GetColorFromWindow(lightColorLabel.BackColor);
+            lightColorLabel.BackColor = color;
+            _pointColorCalculator.SetLightColor(color);
+        }
+
+        private Color GetColorFromWindow(Color color)
+        {
+            ColorDialog MyDialog = new ColorDialog();
+            MyDialog.AllowFullOpen = false;
+            MyDialog.ShowHelp = true;
+            MyDialog.Color = color;
+
+            if (MyDialog.ShowDialog() == DialogResult.OK)
+               return  MyDialog.Color;
+   
+            return color;
+        }
+        private Bitmap GetBitmapOpenFile()
+        {
+            var openFileDialog = new OpenFileDialog();
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+                try
+                {
+                    return (Bitmap) Image.FromFile(openFileDialog.FileName, true);
+                }
+                catch
+                {
+                }
+            return null;
         }
 
         private void LoadButton_Click(object sender, EventArgs e)
@@ -101,7 +217,7 @@ namespace GK1
         {
             _mainBitmap = new DirectBitmap(pictureBox.Width, pictureBox.Height);
             pictureBox.Image = _mainBitmap.Bitmap;
-            Redraw();
+            //Redraw();
         }
 
         private void Form1_KeyUp(object sender, KeyEventArgs e)
@@ -125,14 +241,14 @@ namespace GK1
                 if (_currentMousePoint.X != -1)
                     CurrentPolygon.MovePolygon(e.X - _currentMousePoint.X, e.Y - _currentMousePoint.Y);
                 _currentMousePoint = new Point(e.X, e.Y);
-                Redraw();
+                //Redraw();
 
             }
 
             else if (_selectedPointIndex != -1)
             {
                 CurrentPolygon.MovePoint(_selectedPointIndex, new Point(e.X, e.Y), _usageData);
-                Redraw();
+                //Redraw();
             }
         }
 
@@ -144,7 +260,7 @@ namespace GK1
             bool clicked = !control.Checked;
             CurrentPolygon.ChangeRelation(_selectedLineIndex, clicked ? clickedRelation : VH.None);
 
-            Redraw();
+            //Redraw();
         }
 
         private void ConstLengthTextBoxTextChanged(object sender, EventArgs e)
@@ -156,7 +272,7 @@ namespace GK1
             CurrentPolygon.ChangeMaxSize(_selectedLineIndex, newMaxSize);
 
             rightClickMenu.Close();
-            Redraw();
+            //Redraw();
         }
 
         private void ConstLengthTextBoxKeyPress(object sender, KeyPressEventArgs e)
@@ -232,7 +348,7 @@ namespace GK1
             else
                 _selectedPointIndex = CurrentPolygon.CheckIfNextToExistingPoint(clickPoint);
 
-            Redraw();
+            //Redraw();
         }
     }
 }

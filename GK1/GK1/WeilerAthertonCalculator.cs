@@ -16,7 +16,7 @@ namespace GK1
             if (p1.Length < 3 || p2.Length < 3)
                 return new Point[0];
 
-            if (PolygonArea(p1) > 0)//wieksze bo bitmapa odwraca
+            if (PolygonArea(p1) > 0) //wieksze bo bitmapa odwraca
                 p1 = p1.Reverse().ToArray();
             if (PolygonArea(p2) > 0)
                 p2 = p2.Reverse().ToArray();
@@ -32,7 +32,8 @@ namespace GK1
             return GetPolygonFromList(startingNodeA);
         }
 
-        private static void FillListsWithIntersections(Point[] p1, Point[] p2, PointNode nodeA, PointNode nodeB, out int added)
+        private static void FillListsWithIntersections(Point[] p1, Point[] p2, PointNode nodeA, PointNode nodeB,
+            out int added)
         {
             added = 0;
             List<PointNode>[] listsB = new List<PointNode>[p2.Length]; //listy skrzyzowan dla kazdej krawedzi z a
@@ -67,7 +68,8 @@ namespace GK1
             FillPolygonWithIntersections(nodeB, listsB, p2, false);
         }
 
-        private static void FillPolygonWithIntersections(PointNode node, List<PointNode>[] lists, Point[] polygon, bool isA)
+        private static void FillPolygonWithIntersections(PointNode node, List<PointNode>[] lists, Point[] polygon,
+            bool isA)
         {
             for (int i = 0; i < polygon.Length; i++)
             {
@@ -97,8 +99,8 @@ namespace GK1
 
         private static void SortListClockwise(Point startSegment, Point endSegment, ref List<PointNode> list)
         {
-            bool xDescending =startSegment.X > endSegment.X;
-            bool yDescending =startSegment.Y > endSegment.Y;
+            bool xDescending = startSegment.X > endSegment.X;
+            bool yDescending = startSegment.Y > endSegment.Y;
             if (xDescending && yDescending)
                 list = list.OrderByDescending(p => p.Point.X).ThenByDescending(p => p.Point.Y).ToList();
             else if (xDescending)
@@ -197,24 +199,24 @@ namespace GK1
 
             return result;
         }
+    }
 
-        private class PointNode
+    public class PointNode
+    {
+        public readonly Point Point;
+        public PointNode NextInA;
+        public PointNode NextInB;
+
+        public readonly bool EnteringA;
+        public readonly bool EnteringB;
+
+        public bool Intersection => EnteringB || EnteringA;
+
+        public PointNode(Point point, bool enteringA = false, bool enteringB = false)
         {
-            public readonly Point Point;
-            public PointNode NextInA;
-            public PointNode NextInB;
-
-            public readonly bool EnteringA;
-            public readonly bool EnteringB;
-
-            public bool Intersection => EnteringB || EnteringA;
-
-            public PointNode(Point point, bool enteringA = false, bool enteringB = false)
-            {
-                Point = point;
-                EnteringA = enteringA;
-                EnteringB = enteringB;
-            }
+            Point = point;
+            EnteringA = enteringA;
+            EnteringB = enteringB;
         }
     }
 }

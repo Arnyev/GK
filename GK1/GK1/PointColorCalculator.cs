@@ -1,14 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Forms;
+using Timer = System.Threading.Timer;
 
 namespace GK1
 {
     public interface IPointColorCalculator
     {
+        MyColor GetPixelColor(int x, int y);
+
         void LoadImage(Bitmap bitmap);
         void LoadBumpMap(Bitmap bitmap);
         void LoadNormalMap(Bitmap bitmap);
@@ -22,26 +22,40 @@ namespace GK1
         void ChangeUseBump(bool useBump);
     }
 
-    public class PointColorCalculator
+    public class PointColorCalculator: IPointColorCalculator
     {
-        private Point3D[,] _vectorMap;
-        private Point3D _lightVector = new Point3D(0.5, 0.5, 0.71);
-        private Point3D _lightColor = new Point3D(0.21, 0.56, 0.24);
+        private static readonly Point3D ConstLightVector = new Point3D(0, 0, 1);
+        private Point3D _movingLightVector= new Point3D(0, 0, 1);
 
-        private Bitmap ImageBitmap;
-        private Bitmap VectorMapBitmap;
-        private Bitmap BumpBitmap;
+        private const int TurnTime = 3;
+        private const double BaseHeight = 0.5;
+        private const double TwoPi = 2 * Math.PI;
+
+        private Point3D[,] _vectorMap;
+
+        private DirectBitmap _imageBitmap;
+        private DirectBitmap _vectorMapBitmap;
+        private DirectBitmap _bumpBitmap;
 
         private bool _useImage;
         private bool _useMap;
         private bool _useBump;
         private bool _lightMoves;
 
-        private static Color constColor=Color.FromArgb(100,100,100);
+        private MyColor _objectColor = new MyColor(255, 255, 255);
+        private Point3D _lightColor = new Point3D(0.21, 0.56, 0.24);
+
+        private Timer _timer;
+
+        public PointColorCalculator()
+        {
+            void RefreshLightVector(object s) => SetLightVector();
+            _timer = new Timer(RefreshLightVector, "test",0, 10);
+        }
 
         public MyColor GetPixelColor(int x, int y)
         {
-            var objectColor = !_useImage ? constColor : ImageBitmap.GetPixel(x, y);
+            var objectColor = !_useImage ? _objectColor : _imageBitmap.GetPixel(x, y);
 
             Point3D vector;
             if (!_useMap || x >= _vectorMap.GetLength(0) || y >= _vectorMap.GetLength(1))
@@ -49,12 +63,117 @@ namespace GK1
             else
                 vector = _vectorMap[x, y];
 
-            double cos = Cosinus(vector, _lightVector);
+            var lightVector = _lightMoves ? _movingLightVector : ConstLightVector;
+
+            double cos = Cosinus(vector, lightVector);
             var r = (byte) (objectColor.R * _lightColor.X * cos);
             var g = (byte) (objectColor.G * _lightColor.Y * cos);
             var b = (byte) (objectColor.B * _lightColor.Z * cos);
 
             return new MyColor(r, g, b);
+        }
+
+        public void LoadImage(Bitmap bitmap)
+        {
+            _imageBitmap = new DirectBitmap(bitmap);
+        }
+
+        public void LoadBumpMap(Bitmap bitmap)
+        {
+            _bumpBitmap = new DirectBitmap(bitmap);
+        }
+
+        public void LoadNormalMap(Bitmap bitmap)
+        {
+            _vectorMapBitmap = new DirectBitmap(bitmap);
+            RefreshVectorMap();
+        }
+
+        private void RefreshVectorMap()
+        {
+            if(!_useMap)
+                return;
+            
+            if(_useBump)
+                RefreshVectorWithBumb();
+            else
+                RefreshVectorNoBump();
+        }
+
+        public void SetObjectColor(Color color)
+        {
+            _objectColor = new MyColor(color.R, color.G, color.B);
+        }
+
+        public void SetLightColor(Color color)
+        {
+            double r = (double) color.R / 255;
+            double g = (double) color.G / 255;
+            double b = (double) color.B / 255;
+
+            _lightColor = new Point3D(r, g, b);
+        }
+
+        public void ChangeLightMoving(bool shouldMove)
+        {
+            _lightMoves = shouldMove;
+        }
+
+        public void ChangeUseImage(bool useImage)
+        {
+            if (useImage&&_imageBitmap == null)
+            {
+                MessageBox.Show("Proszę wybrać obraz.");
+                return;
+            }
+            _useImage = useImage;
+        }
+
+        private bool CheckMapBump(bool useMap, bool useBump)
+        {
+            if (useMap&&_vectorMapBitmap == null)
+            {
+                MessageBox.Show("Proszę wybrać mapę wektorów.");
+                return false;
+            }
+            if (useBump && _bumpBitmap == null)
+            {
+                MessageBox.Show("Proszę wybrać mapę zaburzeń.");
+                return false;
+            }
+            return true;
+        }
+
+        public void ChangeUseMap(bool useMap)
+        {
+            if (CheckMapBump(useMap, _useBump))
+            {
+                _useMap = useMap;
+                RefreshVectorMap();
+            }
+        }
+
+        public void ChangeUseBump(bool useBump)
+        {
+            if (CheckMapBump(_useMap, useBump))
+            {
+                _useBump = useBump;
+                RefreshVectorMap();
+            }
+        }
+
+        private void SetLightVector()
+        {
+            var integerPart = DateTime.Now.Second % TurnTime;
+            double timeInCycle = integerPart + (double) DateTime.Now.Millisecond / 1000;
+            timeInCycle *= TwoPi / TurnTime;
+
+            var sinus = Math.Sin(timeInCycle);
+            var cosinus = Math.Cos(timeInCycle);
+
+            var square = 1 + BaseHeight * BaseHeight;
+            var sqrt = Math.Sqrt(square);
+            _movingLightVector = new Point3D(sinus / sqrt, cosinus / sqrt, BaseHeight / sqrt);
         }
 
         public double Cosinus(Point3D n, Point3D l)
@@ -65,12 +184,12 @@ namespace GK1
 
         public void RefreshVectorNoBump()
         {
-            _vectorMap = new Point3D[VectorMapBitmap.Width, VectorMapBitmap.Height];
+            _vectorMap = new Point3D[_vectorMapBitmap.Width, _vectorMapBitmap.Height];
 
-            for(int i=0;i<VectorMapBitmap.Width;i++)
-                for (int j = 0; j < VectorMapBitmap.Height; j++)
+            for(int i=0;i<_vectorMapBitmap.Width;i++)
+                for (int j = 0; j < _vectorMapBitmap.Height; j++)
                 {
-                    var pixel = VectorMapBitmap.GetPixel(i, j);
+                    var pixel = _vectorMapBitmap.GetPixel(i, j);
                     double x = pixel.R / 127.5 - 1;
                     double y = pixel.G / 127.5 - 1;
                     double z = pixel.B / 127.5 - 1;
@@ -86,8 +205,8 @@ namespace GK1
 
         public void RefreshVectorWithBumb()
         {
-            int width = BumpBitmap.Width < VectorMapBitmap.Width ? BumpBitmap.Width : VectorMapBitmap.Width;
-            int height = BumpBitmap.Height < VectorMapBitmap.Height ? BumpBitmap.Height : VectorMapBitmap.Height;
+            int width = _bumpBitmap.Width < _vectorMapBitmap.Width ? _bumpBitmap.Width : _vectorMapBitmap.Width;
+            int height = _bumpBitmap.Height < _vectorMapBitmap.Height ? _bumpBitmap.Height : _vectorMapBitmap.Height;
 
             _vectorMap = new Point3D[width, height];
 
@@ -95,14 +214,14 @@ namespace GK1
             {
                 for (int j = 0; j < height - 1; j++)
                 {
-                    var pixel = BumpBitmap.GetPixel(i, j);
-                    var nextPixelX = BumpBitmap.GetPixel(i + 1, j);
-                    var nextPixelY = BumpBitmap.GetPixel(i, j + 1);
+                    var pixel = _bumpBitmap.GetPixel(i, j);
+                    var nextPixelX = _bumpBitmap.GetPixel(i + 1, j);
+                    var nextPixelY = _bumpBitmap.GetPixel(i, j + 1);
 
-                    int dhx = nextPixelX.R - pixel.R;
-                    int dhy = nextPixelY.R - pixel.R;
+                    double dhx = ((double)nextPixelX.R - pixel.R)/256;
+                    double dhy = ((double)nextPixelY.R - pixel.R)/256;
 
-                    var vectorMapPixel = VectorMapBitmap.GetPixel(i, j);
+                    var vectorMapPixel = _vectorMapBitmap.GetPixel(i, j);
                     double nx = vectorMapPixel.R / 127.5 - 1;
                     double ny = vectorMapPixel.G / 127.5 - 1;
                     double nz = vectorMapPixel.B / 127.5 - 1;
@@ -128,11 +247,6 @@ namespace GK1
                     _vectorMap[i, j] = new Point3D(Nx / sqrt, Ny / sqrt, Nz / sqrt);
                 }
             }
-        }
-
-        public void LoadImageTexture()
-        {
-            
         }
     }
 

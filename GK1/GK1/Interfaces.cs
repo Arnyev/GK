@@ -15,16 +15,6 @@ namespace GK1
             int pointsCount, UsageData usageData);
     }
 
-    internal interface IFormDrawer
-    {
-        void Redraw(IPolygonData[] polygonData, DirectBitmap bitmap, Point selectedPoint, int polygonCount, UsageData usageData);
-    }
-
-    internal interface IPolygonFiller
-    {
-        void FillPolygon(Graphics graphics,DirectBitmap bitmap, Point[] points, Color color);
-    }
-
     public interface IPolygonData
     {
         void MovePolygon(int dx, int dy);
@@ -38,6 +28,7 @@ namespace GK1
         void GetRelations(int index, out VH verticalHorizontal, out int maxSize, out int currentDistance);
         void DeletePoint(int index);
         void GetData(out Point[] points, out VH[] verticalHorizontal, out int[] maxSizes, out int currentPointCount);
+        Point[] GetPoints();
         Point GetPoint(int index);
         PolygonDTO GetPolygonDTO();
         void SetDataFromDto(PolygonDTO polygonDto);

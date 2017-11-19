@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Linq;
 
 namespace GK1
 {
@@ -24,7 +25,6 @@ namespace GK1
             _verticalHorizontals = new VH[MaxPoints];
             _basicCalculator = new BasicCalculator();
             _positionCalculator =new PositionCalculator(_basicCalculator);
-                //new NewtonRaphsonPositionCalculator(new NewtonRaphsonEquationSolver(new MatrixCalculationHelper()));
         }
 
         public void ChangeRelation(int index, VH newRelation)
@@ -142,6 +142,11 @@ namespace GK1
             verticalHorizontal = _verticalHorizontals;
             maxSizes = _maxSizes;
             currentPointCount = _currentPointCount;
+        }
+
+        public Point[] GetPoints()
+        {
+            return _points.Take(_currentPointCount).ToArray();
         }
 
         public Point GetPoint(int index)

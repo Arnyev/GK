@@ -3,13 +3,19 @@ using System.Linq;
 
 namespace GK1
 {
+    internal interface IFormDrawer
+    {
+        void Redraw(IPolygonData[] polygonData, DirectBitmap bitmap, Point selectedPoint, int polygonCount, UsageData usageData);
+    }
+
     internal class FormDrawer : IFormDrawer
     {
         private readonly Font _drawFont = new Font("Arial", 16);
+        private readonly Font _textFont = new Font("Arial", 10);
         private readonly SolidBrush _drawBrush = new SolidBrush(Color.Black);
         private readonly int _rectangleWidth;
         private readonly IPolygonFiller _polygonFiller;
-        private IWeilerAthertonCalculator _weilerAthertonCalculator;
+        private readonly IWeilerAthertonCalculator _weilerAthertonCalculator;
 
         public FormDrawer(int rectangleWidth, IPolygonFiller polygonFiller, IWeilerAthertonCalculator weilerAthertonCalculator)
         {
@@ -21,58 +27,35 @@ namespace GK1
         private const string Instructions =
             "Naciśnij lewy przycisk na wierzchołek aby go złapać wierzchołek, jeszcze raz lewy aby wypuścić. \n" +
             "Naciśnij lewy przycisk dwa razy aby stworzyć nowy wierzchołek. \n" +
-            "Naciśnij prawy przycisk koło krawędzi aby wybrać relację. \n" +
-            "Naciśnij prawy przycisk na wierzchołek aby go usunąć\n" +
             "Naciśnij 1 aby przełączyć wielokąt\n" +
             "Przytrzymaj m aby ruszyć aktywny wielokąt";
 
 
-        public void Redraw(IPolygonData[] polygonData, DirectBitmap bitmap, Point selectedPoint, int polygonCount, UsageData usageData)
+        public void Redraw(IPolygonData[] polygonData, DirectBitmap bitmap, Point selectedPoint, int polygonCount,
+            UsageData usageData)
         {
-
-
             using (var graphics = Graphics.FromImage(bitmap.Bitmap))
             {
                 graphics.Clear(Color.White);
 
+                graphics.DrawString(Instructions, _textFont, _drawBrush, new Point(3, 3));
 
-                graphics.DrawString(Instructions, new Font("Arial", 10), _drawBrush, new Point(3, 3));
-                graphics.DrawString("Ilość obliczeń: " + usageData.CalculationCount, new Font("Arial", 10), _drawBrush,
-                    new Point(bitmap.Width - 130, bitmap.Height - 60));
-                graphics.DrawString("Ilość iteracji: " + usageData.IterationCount, new Font("Arial", 10), _drawBrush,
-                    new Point(bitmap.Width - 130, bitmap.Height - 40));
-                graphics.DrawString("Ilość błędów: " + usageData.ErrorCount, new Font("Arial", 10), _drawBrush,
-                    new Point(bitmap.Width - 130, bitmap.Height - 20));
+                var polygonA = polygonData[0].GetPoints();
+                var polygonB = polygonData[1].GetPoints();
 
-                for (int j = 0; j < polygonCount; j++)
+                foreach (Point p in polygonA.Concat(polygonB))
+                    graphics.DrawRectangle(Pens.Blue, p.X - _rectangleWidth / 2, p.Y - _rectangleWidth / 2,
+                        _rectangleWidth, _rectangleWidth);
+
+                var sum = _weilerAthertonCalculator.PolygonSum(polygonA, polygonB);
+
+                if (sum.Length == 0) //Rozłączne wielokąty
                 {
-                    polygonData[j].GetData(out Point[] points, out VH[] verticalsHorizontals, out int[] maxSizes,
-                        out int pointsCount);
-
-                    var points2 = points.Take(pointsCount).ToArray();
-                    _polygonFiller.FillPolygon(graphics,bitmap, points2, Color.FromArgb(243,105,24));
-
-                    for (var i = 0; i < pointsCount; i++)
-                    {
-
-                        graphics.DrawRectangle(Pens.Blue, points[i].X - _rectangleWidth / 2,
-                            points[i].Y - _rectangleWidth / 2, _rectangleWidth, _rectangleWidth);
-                        //DrawLineAndLabel(graphics, points[i], points[(i + 1) % pointsCount], maxSizes[i],
-                        //    verticalsHorizontals[i], bitmap);
-                    }
+                    _polygonFiller.FillPolygon(bitmap, polygonA);
+                    _polygonFiller.FillPolygon(bitmap, polygonB);
                 }
-                if (polygonData.Length > 1)
-                {
-                    polygonData[0].GetData(out Point[] points1, out VH[] verticalsHorizontals1, out int[] maxSizes1,
-                        out int pointsCount1);
-                    polygonData[1].GetData(out Point[] points2, out VH[] verticalsHorizontals2, out int[] maxSizes2,
-                        out int pointsCount2);
-                    var s = _weilerAthertonCalculator.PolygonSum(points1.Take(pointsCount1).ToArray(),
-                        points2.Take(pointsCount2).ToArray());
-
-                    _polygonFiller.FillPolygon(graphics,bitmap, s, Color.BlueViolet);
-                }
-
+                else
+                    _polygonFiller.FillPolygon(bitmap, sum);
 
                 if (selectedPoint.X != -1)
                     graphics.FillRectangle(Brushes.Red, selectedPoint.X - _rectangleWidth / 2,
