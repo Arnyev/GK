@@ -9,7 +9,7 @@ namespace GK1
     public partial class MainForm : Form
     {
         public const int MinimumDistance = 8;
-        private Bitmap _mainBitmap;
+        private DirectBitmap _mainBitmap;
         private bool _moveKeyPressed;
         private readonly IPolygonData[] _polygons;
         private const int PolygonCount = 2;
@@ -47,12 +47,12 @@ namespace GK1
             loadButton.KeyUp += Form1_KeyUp;
 
             _currentMousePoint = new Point(-1, -1);
-            _mainBitmap = new Bitmap(pictureBox.Width, pictureBox.Height);
-            pictureBox.Image = _mainBitmap;
+            _mainBitmap = new DirectBitmap(pictureBox.Width, pictureBox.Height);
+            pictureBox.Image = _mainBitmap.Bitmap;
             _polygons = new IPolygonData[PolygonCount];
             _polygons[0] = new PolygonData(MinimumDistance);
             _polygons[1] = new PolygonData(MinimumDistance);
-            _formDrawer = new FormDrawer(MinimumDistance);
+            _formDrawer = new FormDrawer(MinimumDistance, new PolygonFiller(new PointColorCalculator()), new WeilerAthertonCalculator());
         }
 
         private void LoadButton_Click(object sender, EventArgs e)
@@ -99,8 +99,8 @@ namespace GK1
 
         private void Form1_Resize(object sender, EventArgs e)
         {
-            _mainBitmap = new Bitmap(pictureBox.Width, pictureBox.Height);
-            pictureBox.Image = _mainBitmap;
+            _mainBitmap = new DirectBitmap(pictureBox.Width, pictureBox.Height);
+            pictureBox.Image = _mainBitmap.Bitmap;
             Redraw();
         }
 
@@ -125,15 +125,18 @@ namespace GK1
                 if (_currentMousePoint.X != -1)
                     CurrentPolygon.MovePolygon(e.X - _currentMousePoint.X, e.Y - _currentMousePoint.Y);
                 _currentMousePoint = new Point(e.X, e.Y);
+                Redraw();
+
             }
 
             else if (_selectedPointIndex != -1)
+            {
                 CurrentPolygon.MovePoint(_selectedPointIndex, new Point(e.X, e.Y), _usageData);
-
-            Redraw();
+                Redraw();
+            }
         }
 
-        private void RelationControlClick(object sender, EventArgs e)
+            private void RelationControlClick(object sender, EventArgs e)
         {
             var clickedRelation = sender == horizontalRelationControl ? VH.Horizontal : VH.Vertical;
             var control = (ToolStripMenuItem) sender;

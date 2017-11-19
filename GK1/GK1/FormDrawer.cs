@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using System.Linq;
 
 namespace GK1
 {
@@ -7,10 +8,14 @@ namespace GK1
         private readonly Font _drawFont = new Font("Arial", 16);
         private readonly SolidBrush _drawBrush = new SolidBrush(Color.Black);
         private readonly int _rectangleWidth;
+        private readonly IPolygonFiller _polygonFiller;
+        private IWeilerAthertonCalculator _weilerAthertonCalculator;
 
-        public FormDrawer(int rectangleWidth)
+        public FormDrawer(int rectangleWidth, IPolygonFiller polygonFiller, IWeilerAthertonCalculator weilerAthertonCalculator)
         {
             _rectangleWidth = rectangleWidth;
+            _polygonFiller = polygonFiller;
+            _weilerAthertonCalculator = weilerAthertonCalculator;
         }
 
         private const string Instructions =
@@ -22,11 +27,15 @@ namespace GK1
             "Przytrzymaj m aby ruszyć aktywny wielokąt";
 
 
-        public void Redraw(IPolygonData[] polygonData, Bitmap bitmap, Point selectedPoint, int polygonCount, UsageData usageData)
+        public void Redraw(IPolygonData[] polygonData, DirectBitmap bitmap, Point selectedPoint, int polygonCount, UsageData usageData)
         {
-            using (var graphics = Graphics.FromImage(bitmap))
+
+
+            using (var graphics = Graphics.FromImage(bitmap.Bitmap))
             {
                 graphics.Clear(Color.White);
+
+
                 graphics.DrawString(Instructions, new Font("Arial", 10), _drawBrush, new Point(3, 3));
                 graphics.DrawString("Ilość obliczeń: " + usageData.CalculationCount, new Font("Arial", 10), _drawBrush,
                     new Point(bitmap.Width - 130, bitmap.Height - 60));
@@ -40,15 +49,30 @@ namespace GK1
                     polygonData[j].GetData(out Point[] points, out VH[] verticalsHorizontals, out int[] maxSizes,
                         out int pointsCount);
 
+                    var points2 = points.Take(pointsCount).ToArray();
+                    _polygonFiller.FillPolygon(graphics,bitmap, points2, Color.FromArgb(243,105,24));
+
                     for (var i = 0; i < pointsCount; i++)
                     {
 
                         graphics.DrawRectangle(Pens.Blue, points[i].X - _rectangleWidth / 2,
                             points[i].Y - _rectangleWidth / 2, _rectangleWidth, _rectangleWidth);
-                        DrawLineAndLabel(graphics, points[i], points[(i + 1) % pointsCount], maxSizes[i],
-                            verticalsHorizontals[i], bitmap);
+                        //DrawLineAndLabel(graphics, points[i], points[(i + 1) % pointsCount], maxSizes[i],
+                        //    verticalsHorizontals[i], bitmap);
                     }
                 }
+                if (polygonData.Length > 1)
+                {
+                    polygonData[0].GetData(out Point[] points1, out VH[] verticalsHorizontals1, out int[] maxSizes1,
+                        out int pointsCount1);
+                    polygonData[1].GetData(out Point[] points2, out VH[] verticalsHorizontals2, out int[] maxSizes2,
+                        out int pointsCount2);
+                    var s = _weilerAthertonCalculator.PolygonSum(points1.Take(pointsCount1).ToArray(),
+                        points2.Take(pointsCount2).ToArray());
+
+                    _polygonFiller.FillPolygon(graphics,bitmap, s, Color.BlueViolet);
+                }
+
 
                 if (selectedPoint.X != -1)
                     graphics.FillRectangle(Brushes.Red, selectedPoint.X - _rectangleWidth / 2,

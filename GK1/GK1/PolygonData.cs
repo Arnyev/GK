@@ -23,8 +23,8 @@ namespace GK1
             _points = new Point[MaxPoints];
             _verticalHorizontals = new VH[MaxPoints];
             _basicCalculator = new BasicCalculator();
-            _positionCalculator =
-                new NewtonRaphsonPositionCalculator(new NewtonRaphsonEquationSolver(new MatrixCalculationHelper()));
+            _positionCalculator =new PositionCalculator(_basicCalculator);
+                //new NewtonRaphsonPositionCalculator(new NewtonRaphsonEquationSolver(new MatrixCalculationHelper()));
         }
 
         public void ChangeRelation(int index, VH newRelation)

@@ -17,7 +17,12 @@ namespace GK1
 
     internal interface IFormDrawer
     {
-        void Redraw(IPolygonData[] polygonData, Bitmap bitmap, Point selectedPoint, int polygonCount, UsageData usageData);
+        void Redraw(IPolygonData[] polygonData, DirectBitmap bitmap, Point selectedPoint, int polygonCount, UsageData usageData);
+    }
+
+    internal interface IPolygonFiller
+    {
+        void FillPolygon(Graphics graphics,DirectBitmap bitmap, Point[] points, Color color);
     }
 
     public interface IPolygonData
