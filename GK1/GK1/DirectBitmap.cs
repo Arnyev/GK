@@ -47,6 +47,8 @@ namespace GK1
         public void SetPixel(int x, int y, MyColor color)
         {
             var index = (y * Width +x) * 4;
+            if (index > Bits.Length||index<0)
+                return;
             Bits[index] = color.B;
             Bits[index + 1] = color.G;
             Bits[index + 2] = color.R;
@@ -55,6 +57,8 @@ namespace GK1
         public MyColor GetPixel(int x, int y)
         {
             var index = (y * Width + x) * 4;
+            if(index>Bits.Length || index < 0)
+                return new MyColor();
             return new MyColor(Bits[index + 2], Bits[index + 1], Bits[index]);
         }
     }

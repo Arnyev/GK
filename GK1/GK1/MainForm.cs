@@ -21,7 +21,7 @@ namespace GK1
         private UsageData _usageData = new UsageData();
         private IPolygonData CurrentPolygon => _polygons[_selectedPolygonIndex];
 
-        private IPointColorCalculator _pointColorCalculator;
+        private readonly IPointColorCalculator _pointColorCalculator;
 
         public MainForm()
         {
@@ -74,6 +74,14 @@ namespace GK1
 
             moveLightConstRadioButton.CheckedChanged += (s, e) =>
                 _pointColorCalculator.ChangeLightMoving(!moveLightConstRadioButton.Checked);
+
+            moveLightTextBox.TextChanged += OnRadiusTextChanged;
+        }
+
+        private void OnRadiusTextChanged(object sender, EventArgs e)
+        {
+            if (double.TryParse(moveLightTextBox.Text, out double radius))
+                _pointColorCalculator.ChangeRadius(radius);
         }
 
         private void VectorTextureButton_Click(object sender, EventArgs e)
@@ -129,6 +137,8 @@ namespace GK1
 
             _pointColorCalculator.ChangeLightMoving(false);
             moveLightConstRadioButton.Checked = true;
+
+            _pointColorCalculator.ChangeRadius(0);
         }
 
         private void ObjectColorButton_Click(object sender, EventArgs e)

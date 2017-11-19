@@ -410,7 +410,7 @@ namespace GK1
             // 
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(3, 13);
+            this.label1.Location = new System.Drawing.Point(3, 9);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(67, 26);
             this.label1.TabIndex = 0;
@@ -424,7 +424,7 @@ namespace GK1
             this.lightColorLabel.Location = new System.Drawing.Point(73, 0);
             this.lightColorLabel.Margin = new System.Windows.Forms.Padding(0);
             this.lightColorLabel.Name = "lightColorLabel";
-            this.lightColorLabel.Size = new System.Drawing.Size(147, 53);
+            this.lightColorLabel.Size = new System.Drawing.Size(147, 44);
             this.lightColorLabel.TabIndex = 1;
             // 
             // tableLayoutPanel3
@@ -478,7 +478,7 @@ namespace GK1
             this.objectTextureBox.Location = new System.Drawing.Point(73, 50);
             this.objectTextureBox.Margin = new System.Windows.Forms.Padding(0);
             this.objectTextureBox.Name = "objectTextureBox";
-            this.objectTextureBox.Size = new System.Drawing.Size(147, 81);
+            this.objectTextureBox.Size = new System.Drawing.Size(147, 65);
             this.objectTextureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.objectTextureBox.TabIndex = 2;
             this.objectTextureBox.TabStop = false;

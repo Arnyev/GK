@@ -43,16 +43,20 @@ namespace GK1
                 var polygonA = polygonData[0].GetPoints();
                 var polygonB = polygonData[1].GetPoints();
 
-                foreach (Point p in polygonA.Concat(polygonB))
+                foreach (Point p in polygonA)
                     graphics.DrawRectangle(Pens.Blue, p.X - _rectangleWidth / 2, p.Y - _rectangleWidth / 2,
+                        _rectangleWidth, _rectangleWidth);
+
+                foreach (Point p in polygonB)
+                    graphics.DrawRectangle(Pens.DarkViolet, p.X - _rectangleWidth / 2, p.Y - _rectangleWidth / 2,
                         _rectangleWidth, _rectangleWidth);
 
                 var sum = _weilerAthertonCalculator.PolygonSum(polygonA, polygonB);
 
                 if (sum.Length == 0) //Rozłączne wielokąty
                 {
-                    _polygonFiller.FillPolygon(bitmap, polygonA);
-                    _polygonFiller.FillPolygon(bitmap, polygonB);
+                    //_polygonFiller.FillPolygon(bitmap, polygonA);
+                    //_polygonFiller.FillPolygon(bitmap, polygonB);
                 }
                 else
                     _polygonFiller.FillPolygon(bitmap, sum);

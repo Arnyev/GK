@@ -5,15 +5,6 @@ namespace GK1
 {
     internal static class Program
     {
-        //private static void Main()
-        //{
-        //    PolygonFiller.test();
-        //}
-
-
-        /// <summary>
-        /// The main entry point for the application.
-        /// </summary>
         [STAThread]
         private static void Main()
         {

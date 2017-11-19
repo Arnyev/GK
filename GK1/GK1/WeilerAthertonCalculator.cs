@@ -29,7 +29,7 @@ namespace GK1
             if (added == 0)
                 return new Point[0];
 
-            return GetPolygonFromList(startingNodeA);
+            return GetPolygonSumFromList(startingNodeA);
         }
 
         private static void FillListsWithIntersections(Point[] p1, Point[] p2, PointNode nodeA, PointNode nodeB,
@@ -56,7 +56,7 @@ namespace GK1
                     if (GetIntersection(curA, nextA, curB, nextB, out Point intersection))
                     {
                         var enteringA = !IsLeft(curA, nextA, nextB);
-                        var enteringB = !IsLeft(curB, nextB, nextA);
+                        var enteringB = !enteringA;
                         var newNode = new PointNode(intersection, enteringA, enteringB);
                         added++;
                         listsB[j].Add(newNode);
@@ -111,15 +111,14 @@ namespace GK1
                 list = list.OrderBy(p => p.Point.X).ThenBy(p => p.Point.Y).ToList();
         }
 
-        private static Point[] GetPolygonFromList(PointNode startingNodeA)
+        private static Point[] GetPolygonSumFromList(PointNode startingNodeA)
         {
             var newPolygon = new List<Point>();
             var curNode = startingNodeA;
 
             while (!curNode.EnteringB)
-            {
                 curNode = curNode.NextInA;
-            }
+            
             var startingNode = curNode;
             bool isInA = true;
             do

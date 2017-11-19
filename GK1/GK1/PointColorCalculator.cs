@@ -20,6 +20,7 @@ namespace GK1
         void ChangeUseImage(bool useImage);
         void ChangeUseMap(bool useMap);
         void ChangeUseBump(bool useBump);
+        void ChangeRadius(double radius);
     }
 
     public class PointColorCalculator: IPointColorCalculator
@@ -30,6 +31,7 @@ namespace GK1
         private const int TurnTime = 3;
         private const double BaseHeight = 0.5;
         private const double TwoPi = 2 * Math.PI;
+        private double _radius = 0;
 
         private Point3D[,] _vectorMap;
 
@@ -162,18 +164,23 @@ namespace GK1
             }
         }
 
+        public void ChangeRadius(double radius)
+        {
+            _radius = radius;
+        }
+
         private void SetLightVector()
         {
             var integerPart = DateTime.Now.Second % TurnTime;
             double timeInCycle = integerPart + (double) DateTime.Now.Millisecond / 1000;
             timeInCycle *= TwoPi / TurnTime;
 
-            var sinus = Math.Sin(timeInCycle);
-            var cosinus = Math.Cos(timeInCycle);
+            var x = Math.Sin(timeInCycle) * _radius;
+            var y = Math.Cos(timeInCycle) * _radius;
 
-            var square = 1 + BaseHeight * BaseHeight;
+            var square = x * x + y * y + BaseHeight * BaseHeight;
             var sqrt = Math.Sqrt(square);
-            _movingLightVector = new Point3D(sinus / sqrt, cosinus / sqrt, BaseHeight / sqrt);
+            _movingLightVector = new Point3D(x / sqrt, y / sqrt, BaseHeight / sqrt);
         }
 
         public double Cosinus(Point3D n, Point3D l)
