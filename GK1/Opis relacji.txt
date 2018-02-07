@@ -1,4 +1,0 @@
-W projekcie wystêpuj¹ niegotowe i nieuzywane funkcjonalnoœci dotycz¹ce metody Newtona.
-Ruszanie wielok¹ta przesta³o dzia³ac przy przeróbce kodu, to znaczy jest zdecydowanie za bardzo wra¿liwe na ruch myszy, nie zd¹¿y³em sprawdziæ dlaczego.
-W efekcie zapewnianie relacji odbywa sie przez poprawê pozycji punktów wielok¹ta w pêtli, najpierw w jedn¹, potem w drug¹ stronê.
-Wymuszana jest nieruchomoœæ wierzcho³ka poruszanego mysz¹, zapewnianie odpowiedniej odleg³oœci jest przez przestawianie pozycji wierzcho³ka wzd³u¿ obecnego kierunku.

@@ -1,0 +1,1 @@
+W przypadku w którym stan radio buttonów nie odpowiada stanowi faktycznemu wystarczy radio button zmieniæ na drugi i jeszcze raz na pierwszy, "prze³adowaæ go".

@@ -46,15 +46,29 @@ namespace GK1
             _polygons[1] = new PolygonData(MinimumDistance);
             _pointColorCalculator=new PointColorCalculator();
 
+            _polygons[0].AddPoint(new Point(100, 600));
+            _polygons[0].AddPoint(new Point(600, 200));
+            _polygons[0].AddPoint(new Point(1500, 100));
+            _polygons[0].AddPoint(new Point(1000,1000));
+            _polygons[0].AddPoint(new Point(100,800));
+
+
+            _polygons[1].AddPoint(new Point(0, 0));
+            _polygons[1].AddPoint(new Point(1000, 300));
+            _polygons[1].AddPoint(new Point(700, 400));
+
+            _polygons[1].AddPoint(new Point(0, 300));
+
+
             _formDrawer = new FormDrawer(MinimumDistance, new PolygonFiller(_pointColorCalculator),
                 new WeilerAthertonCalculator());
 
-            SetRigthPanelEvents();
+            SetLeftPanelEvents();
             SetTimerRedraw();
             InitColorCalculatorAndControlsState();
         }
 
-        private void SetRigthPanelEvents()
+        private void SetLeftPanelEvents()
         {
             lightColorButton.Click += LightColorButton_Click;
             objectColorButton.Click += ObjectColorButton_Click;
@@ -76,6 +90,11 @@ namespace GK1
                 _pointColorCalculator.ChangeLightMoving(!moveLightConstRadioButton.Checked);
 
             moveLightTextBox.TextChanged += OnRadiusTextChanged;
+
+            bumbTrack.ValueChanged += (s, e) => _pointColorCalculator.ChangeBumpCoef((double)bumbTrack.Value / 1000);
+            distributedTrack.ValueChanged += (s, e) => _pointColorCalculator.ChangeDistributedCoef((double)distributedTrack.Value / 100);
+            mirrorTrack.ValueChanged += (s, e) => _pointColorCalculator.ChangeMirrorCoef((double)mirrorTrack.Value / 100);
+            cosinusTrack.ValueChanged += (s, e) => _pointColorCalculator.ChangeCosExp(cosinusTrack.Value * 2);
         }
 
         private void OnRadiusTextChanged(object sender, EventArgs e)
@@ -138,7 +157,18 @@ namespace GK1
             _pointColorCalculator.ChangeLightMoving(false);
             moveLightConstRadioButton.Checked = true;
 
-            _pointColorCalculator.ChangeRadius(0);
+            var bumpmap = (Bitmap)Image.FromFile("bumpmap.jpg");
+            _pointColorCalculator.LoadBumpMap(bumpmap);
+            bumpTextureBox.Image = bumpmap;
+
+            var normalmap = (Bitmap)Image.FromFile("normalmap.png");
+            _pointColorCalculator.LoadNormalMap(normalmap);
+            vectorTextureBox.Image = normalmap;
+
+            bumbTrack.Value = 10;
+            distributedTrack.Value = 10;
+            mirrorTrack.Value = 10;
+            cosinusTrack.Value = 10;
         }
 
         private void ObjectColorButton_Click(object sender, EventArgs e)

@@ -69,6 +69,18 @@ namespace GK1
             this.objectTextureButton = new System.Windows.Forms.Button();
             this.objectColorRadioButton = new System.Windows.Forms.RadioButton();
             this.objectTextureRadioButton = new System.Windows.Forms.RadioButton();
+            this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel7 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel8 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel9 = new System.Windows.Forms.TableLayoutPanel();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
+            this.bumbTrack = new System.Windows.Forms.TrackBar();
+            this.distributedTrack = new System.Windows.Forms.TrackBar();
+            this.mirrorTrack = new System.Windows.Forms.TrackBar();
+            this.cosinusTrack = new System.Windows.Forms.TrackBar();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.rightClickMenu.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -80,6 +92,14 @@ namespace GK1
             this.tableLayoutPanel2.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.objectTextureBox)).BeginInit();
+            this.tableLayoutPanel4.SuspendLayout();
+            this.tableLayoutPanel7.SuspendLayout();
+            this.tableLayoutPanel8.SuspendLayout();
+            this.tableLayoutPanel9.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.bumbTrack)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.distributedTrack)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.mirrorTrack)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.cosinusTrack)).BeginInit();
             this.SuspendLayout();
             // 
             // pictureBox
@@ -87,8 +107,8 @@ namespace GK1
             this.pictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBox.Location = new System.Drawing.Point(303, 3);
             this.pictureBox.Name = "pictureBox";
-            this.tableLayoutPanel1.SetRowSpan(this.pictureBox, 5);
-            this.pictureBox.Size = new System.Drawing.Size(1002, 528);
+            this.tableLayoutPanel1.SetRowSpan(this.pictureBox, 9);
+            this.pictureBox.Size = new System.Drawing.Size(1116, 644);
             this.pictureBox.TabIndex = 0;
             this.pictureBox.TabStop = false;
             // 
@@ -131,22 +151,30 @@ namespace GK1
             this.tableLayoutPanel1.ColumnCount = 2;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 300F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel9, 0, 8);
+            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel8, 0, 7);
+            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel7, 0, 6);
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel6, 0, 4);
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel5, 0, 3);
             this.tableLayoutPanel1.Controls.Add(this.table, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.pictureBox, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel3, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel4, 0, 5);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 5;
+            this.tableLayoutPanel1.RowCount = 9;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 120F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(1308, 534);
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1422, 650);
             this.tableLayoutPanel1.TabIndex = 1;
             // 
             // tableLayoutPanel6
@@ -161,14 +189,14 @@ namespace GK1
             this.tableLayoutPanel6.Controls.Add(this.moveLightTextBox, 1, 2);
             this.tableLayoutPanel6.Controls.Add(this.label6, 1, 1);
             this.tableLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel6.Location = new System.Drawing.Point(3, 416);
+            this.tableLayoutPanel6.Location = new System.Drawing.Point(3, 371);
             this.tableLayoutPanel6.Name = "tableLayoutPanel6";
             this.tableLayoutPanel6.RowCount = 3;
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel6.Size = new System.Drawing.Size(294, 115);
+            this.tableLayoutPanel6.Size = new System.Drawing.Size(294, 114);
             this.tableLayoutPanel6.TabIndex = 5;
             // 
             // label9
@@ -234,13 +262,13 @@ namespace GK1
             this.tableLayoutPanel5.Controls.Add(this.bumpNoneRadioButton, 0, 1);
             this.tableLayoutPanel5.Controls.Add(this.bumpTextureRadioButton, 0, 2);
             this.tableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel5.Location = new System.Drawing.Point(3, 295);
+            this.tableLayoutPanel5.Location = new System.Drawing.Point(3, 265);
             this.tableLayoutPanel5.Name = "tableLayoutPanel5";
             this.tableLayoutPanel5.RowCount = 3;
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel5.Size = new System.Drawing.Size(294, 115);
+            this.tableLayoutPanel5.Size = new System.Drawing.Size(294, 100);
             this.tableLayoutPanel5.TabIndex = 4;
             // 
             // label7
@@ -260,7 +288,7 @@ namespace GK1
             this.bumpTextureBox.Location = new System.Drawing.Point(73, 50);
             this.bumpTextureBox.Margin = new System.Windows.Forms.Padding(0);
             this.bumpTextureBox.Name = "bumpTextureBox";
-            this.bumpTextureBox.Size = new System.Drawing.Size(147, 65);
+            this.bumpTextureBox.Size = new System.Drawing.Size(147, 50);
             this.bumpTextureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.bumpTextureBox.TabIndex = 2;
             this.bumpTextureBox.TabStop = false;
@@ -311,13 +339,13 @@ namespace GK1
             this.table.Controls.Add(this.vectorConstRadioButton, 0, 1);
             this.table.Controls.Add(this.vectorTextureRadioButton, 0, 2);
             this.table.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.table.Location = new System.Drawing.Point(3, 174);
+            this.table.Location = new System.Drawing.Point(3, 159);
             this.table.Name = "table";
             this.table.RowCount = 3;
             this.table.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.table.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.table.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.table.Size = new System.Drawing.Size(294, 115);
+            this.table.Size = new System.Drawing.Size(294, 100);
             this.table.TabIndex = 3;
             // 
             // label5
@@ -337,7 +365,7 @@ namespace GK1
             this.vectorTextureBox.Location = new System.Drawing.Point(73, 50);
             this.vectorTextureBox.Margin = new System.Windows.Forms.Padding(0);
             this.vectorTextureBox.Name = "vectorTextureBox";
-            this.vectorTextureBox.Size = new System.Drawing.Size(147, 65);
+            this.vectorTextureBox.Size = new System.Drawing.Size(147, 50);
             this.vectorTextureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.vectorTextureBox.TabIndex = 2;
             this.vectorTextureBox.TabStop = false;
@@ -447,7 +475,7 @@ namespace GK1
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(294, 115);
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(294, 100);
             this.tableLayoutPanel3.TabIndex = 2;
             // 
             // label3
@@ -478,7 +506,7 @@ namespace GK1
             this.objectTextureBox.Location = new System.Drawing.Point(73, 50);
             this.objectTextureBox.Margin = new System.Windows.Forms.Padding(0);
             this.objectTextureBox.Name = "objectTextureBox";
-            this.objectTextureBox.Size = new System.Drawing.Size(147, 65);
+            this.objectTextureBox.Size = new System.Drawing.Size(147, 50);
             this.objectTextureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.objectTextureBox.TabIndex = 2;
             this.objectTextureBox.TabStop = false;
@@ -529,11 +557,147 @@ namespace GK1
             this.objectTextureRadioButton.Text = "Tekstura";
             this.objectTextureRadioButton.UseVisualStyleBackColor = true;
             // 
+            // tableLayoutPanel4
+            // 
+            this.tableLayoutPanel4.ColumnCount = 2;
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30F));
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 70F));
+            this.tableLayoutPanel4.Controls.Add(this.label2, 0, 0);
+            this.tableLayoutPanel4.Controls.Add(this.bumbTrack, 1, 0);
+            this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel4.Location = new System.Drawing.Point(3, 491);
+            this.tableLayoutPanel4.Name = "tableLayoutPanel4";
+            this.tableLayoutPanel4.RowCount = 1;
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(294, 34);
+            this.tableLayoutPanel4.TabIndex = 6;
+            // 
+            // tableLayoutPanel7
+            // 
+            this.tableLayoutPanel7.ColumnCount = 2;
+            this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30F));
+            this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 70F));
+            this.tableLayoutPanel7.Controls.Add(this.distributedTrack, 1, 0);
+            this.tableLayoutPanel7.Controls.Add(this.label4, 0, 0);
+            this.tableLayoutPanel7.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel7.Location = new System.Drawing.Point(3, 531);
+            this.tableLayoutPanel7.Name = "tableLayoutPanel7";
+            this.tableLayoutPanel7.RowCount = 1;
+            this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel7.Size = new System.Drawing.Size(294, 34);
+            this.tableLayoutPanel7.TabIndex = 7;
+            // 
+            // tableLayoutPanel8
+            // 
+            this.tableLayoutPanel8.ColumnCount = 2;
+            this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30F));
+            this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 70F));
+            this.tableLayoutPanel8.Controls.Add(this.mirrorTrack, 1, 0);
+            this.tableLayoutPanel8.Controls.Add(this.label8, 0, 0);
+            this.tableLayoutPanel8.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel8.Location = new System.Drawing.Point(3, 571);
+            this.tableLayoutPanel8.Name = "tableLayoutPanel8";
+            this.tableLayoutPanel8.RowCount = 1;
+            this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel8.Size = new System.Drawing.Size(294, 34);
+            this.tableLayoutPanel8.TabIndex = 8;
+            // 
+            // tableLayoutPanel9
+            // 
+            this.tableLayoutPanel9.ColumnCount = 2;
+            this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30F));
+            this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 70F));
+            this.tableLayoutPanel9.Controls.Add(this.cosinusTrack, 1, 0);
+            this.tableLayoutPanel9.Controls.Add(this.label10, 0, 0);
+            this.tableLayoutPanel9.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel9.Location = new System.Drawing.Point(3, 611);
+            this.tableLayoutPanel9.Name = "tableLayoutPanel9";
+            this.tableLayoutPanel9.RowCount = 1;
+            this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel9.Size = new System.Drawing.Size(294, 36);
+            this.tableLayoutPanel9.TabIndex = 9;
+            // 
+            // label2
+            // 
+            this.label2.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(3, 10);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(60, 13);
+            this.label2.TabIndex = 0;
+            this.label2.Text = "Zaburzenia";
+            // 
+            // label4
+            // 
+            this.label4.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(3, 4);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(64, 26);
+            this.label4.TabIndex = 0;
+            this.label4.Text = "Składowa rozproszona";
+            // 
+            // label8
+            // 
+            this.label8.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(3, 4);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(71, 26);
+            this.label8.TabIndex = 0;
+            this.label8.Text = "Składowa zwierciadlana";
+            // 
+            // label10
+            // 
+            this.label10.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(3, 5);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(62, 26);
+            this.label10.TabIndex = 0;
+            this.label10.Text = "Wykładnik cosinusa";
+            // 
+            // bumbTrack
+            // 
+            this.bumbTrack.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bumbTrack.Location = new System.Drawing.Point(91, 3);
+            this.bumbTrack.Maximum = 100;
+            this.bumbTrack.Name = "bumbTrack";
+            this.bumbTrack.Size = new System.Drawing.Size(200, 28);
+            this.bumbTrack.TabIndex = 1;
+            // 
+            // distributedTrack
+            // 
+            this.distributedTrack.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.distributedTrack.Location = new System.Drawing.Point(91, 3);
+            this.distributedTrack.Maximum = 100;
+            this.distributedTrack.Name = "distributedTrack";
+            this.distributedTrack.Size = new System.Drawing.Size(200, 28);
+            this.distributedTrack.TabIndex = 2;
+            // 
+            // mirrorTrack
+            // 
+            this.mirrorTrack.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mirrorTrack.Location = new System.Drawing.Point(91, 3);
+            this.mirrorTrack.Maximum = 100;
+            this.mirrorTrack.Name = "mirrorTrack";
+            this.mirrorTrack.Size = new System.Drawing.Size(200, 28);
+            this.mirrorTrack.TabIndex = 2;
+            // 
+            // cosinusTrack
+            // 
+            this.cosinusTrack.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cosinusTrack.Location = new System.Drawing.Point(91, 3);
+            this.cosinusTrack.Maximum = 100;
+            this.cosinusTrack.Name = "cosinusTrack";
+            this.cosinusTrack.Size = new System.Drawing.Size(200, 30);
+            this.cosinusTrack.TabIndex = 2;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1308, 534);
+            this.ClientSize = new System.Drawing.Size(1422, 650);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "MainForm";
             this.Text = "Form1";
@@ -553,6 +717,18 @@ namespace GK1
             this.tableLayoutPanel3.ResumeLayout(false);
             this.tableLayoutPanel3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.objectTextureBox)).EndInit();
+            this.tableLayoutPanel4.ResumeLayout(false);
+            this.tableLayoutPanel4.PerformLayout();
+            this.tableLayoutPanel7.ResumeLayout(false);
+            this.tableLayoutPanel7.PerformLayout();
+            this.tableLayoutPanel8.ResumeLayout(false);
+            this.tableLayoutPanel8.PerformLayout();
+            this.tableLayoutPanel9.ResumeLayout(false);
+            this.tableLayoutPanel9.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.bumbTrack)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.distributedTrack)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.mirrorTrack)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.cosinusTrack)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -596,6 +772,18 @@ namespace GK1
         private RadioButton vectorTextureRadioButton;
         private TextBox moveLightTextBox;
         private Label label6;
+        private TableLayoutPanel tableLayoutPanel9;
+        private TrackBar cosinusTrack;
+        private Label label10;
+        private TableLayoutPanel tableLayoutPanel8;
+        private TrackBar mirrorTrack;
+        private Label label8;
+        private TableLayoutPanel tableLayoutPanel7;
+        private TrackBar distributedTrack;
+        private Label label4;
+        private TableLayoutPanel tableLayoutPanel4;
+        private Label label2;
+        private TrackBar bumbTrack;
     }
 }
 

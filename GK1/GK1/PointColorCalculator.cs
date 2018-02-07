@@ -21,17 +21,27 @@ namespace GK1
         void ChangeUseMap(bool useMap);
         void ChangeUseBump(bool useBump);
         void ChangeRadius(double radius);
+        void ChangeBumpCoef(double coef);
+        void ChangeDistributedCoef(double coef);
+        void ChangeMirrorCoef(double coef);
+        void ChangeCosExp(int cosExp);
     }
 
     public class PointColorCalculator: IPointColorCalculator
     {
-        private static readonly Point3D ConstLightVector = new Point3D(0, 0, 1);
-        private Point3D _movingLightVector= new Point3D(0, 0, 1);
+        private static readonly Point3D ConstVector = new Point3D(0, 0, 1);
+        private Point3D _movingLightPosition= new Point3D(0, 0, 1);
 
-        private const int TurnTime = 3;
+        private const int TurnTime = 5;
+        private const int CycleTime = 30;
         private const double BaseHeight = 0.5;
         private const double TwoPi = 2 * Math.PI;
         private double _radius = 0;
+
+        private double _bumpCoef = (double)1 / 256;
+        private double _distributedCoed = 0;
+        private double _mirrorCoef = 1;
+        private double _cosExp = 20;
 
         private Point3D[,] _vectorMap;
 
@@ -51,8 +61,19 @@ namespace GK1
 
         public PointColorCalculator()
         {
-            void RefreshLightVector(object s) => SetLightVector();
+            void RefreshLightVector(object s) => SetLightPosition();
             _timer = new Timer(RefreshLightVector, "test",0, 10);
+        }
+
+        private Point3D GetLightVector(int x, int y)
+        {
+            var dx = _movingLightPosition.X - x;
+            var dy = _movingLightPosition.Y - y;
+            var dz = _movingLightPosition.Z ;
+
+            var sumSquare = dx * dx + dy * dy + dz * dz;
+            var sqrt = Math.Sqrt(sumSquare);
+            return new Point3D(dx / sqrt, dy / sqrt, dz / sqrt);
         }
 
         public MyColor GetPixelColor(int x, int y)
@@ -65,14 +86,38 @@ namespace GK1
             else
                 vector = _vectorMap[x, y];
 
-            var lightVector = _lightMoves ? _movingLightVector : ConstLightVector;
+            var lightVector = _lightMoves ? GetLightVector(x, y) : ConstVector;
 
             double cos = Cosinus(vector, lightVector);
-            var r = (byte) (objectColor.R * _lightColor.X * cos);
-            var g = (byte) (objectColor.G * _lightColor.Y * cos);
-            var b = (byte) (objectColor.B * _lightColor.Z * cos);
+            var distR = (byte)(objectColor.R * _lightColor.X * cos * _distributedCoed);
+            var distG = (byte)(objectColor.G * _lightColor.Y * cos * _distributedCoed);
+            var distB = (byte)(objectColor.B * _lightColor.Z * cos * _distributedCoed);
+
+            var R = GetRVector(vector, lightVector);
+
+            var coef = Math.Pow(Cosinus(R, ConstVector), _cosExp) * 256 * _mirrorCoef;
+            var mirrorR = _lightColor.X * coef; 
+            var mirrorG = _lightColor.Y * coef;
+            var mirrorB = _lightColor.Z * coef;
+
+            var r = distR + mirrorR > 255 ? (byte)255 : (byte)(distR + mirrorR);
+            var g = distG + mirrorG > 255 ? (byte)255 : (byte)(distG + mirrorG);
+            var b = distB + mirrorB > 255 ? (byte)255 : (byte)(distG + mirrorB);
 
             return new MyColor(r, g, b);
+        }
+
+        private Point3D GetRVector(Point3D N, Point3D L)
+        {
+            var coef = 2 * Cosinus(N, L);
+
+            double x = coef * N.X - L.X;
+            double y = coef * N.Y - L.Y;
+            double z = coef * N.Z - L.Z;
+
+            var squareSum = x * x + y * y + z * z;
+            var sqrt = Math.Sqrt(squareSum);
+            return new Point3D(x/sqrt, y/sqrt, z/sqrt);
         }
 
         public void LoadImage(Bitmap bitmap)
@@ -169,18 +214,26 @@ namespace GK1
             _radius = radius;
         }
 
-        private void SetLightVector()
+        private void SetLightPosition()
         {
+            var cycleNumber = (DateTime.Now.Second % CycleTime) / TurnTime;
             var integerPart = DateTime.Now.Second % TurnTime;
             double timeInCycle = integerPart + (double) DateTime.Now.Millisecond / 1000;
             timeInCycle *= TwoPi / TurnTime;
 
-            var x = Math.Sin(timeInCycle) * _radius;
-            var y = Math.Cos(timeInCycle) * _radius;
+            int middleOfMapX = 0;
+            int middleOfMapY = 0;
 
-            var square = x * x + y * y + BaseHeight * BaseHeight;
-            var sqrt = Math.Sqrt(square);
-            _movingLightVector = new Point3D(x / sqrt, y / sqrt, BaseHeight / sqrt);
+            if (_vectorMap!=null)
+            {
+                middleOfMapX= _vectorMap.GetLength(0) / 2;
+                middleOfMapX = _vectorMap.GetLength(1) / 2;
+            }
+
+            var x = Math.Sin(timeInCycle) * _radius + middleOfMapX;
+            var y = Math.Cos(timeInCycle) * _radius + middleOfMapY;
+
+            _movingLightPosition = new Point3D(x, y, cycleNumber*1000);
         }
 
         public double Cosinus(Point3D n, Point3D l)
@@ -225,8 +278,8 @@ namespace GK1
                     var nextPixelX = _bumpBitmap.GetPixel(i + 1, j);
                     var nextPixelY = _bumpBitmap.GetPixel(i, j + 1);
 
-                    double dhx = ((double)nextPixelX.R - pixel.R)/256;
-                    double dhy = ((double)nextPixelY.R - pixel.R)/256;
+                    double dhx = ((double)nextPixelX.R - pixel.R) * _bumpCoef;
+                    double dhy = ((double)nextPixelY.R - pixel.R) * _bumpCoef;
 
                     var vectorMapPixel = _vectorMapBitmap.GetPixel(i, j);
                     double nx = vectorMapPixel.R / 127.5 - 1;
@@ -254,6 +307,27 @@ namespace GK1
                     _vectorMap[i, j] = new Point3D(Nx / sqrt, Ny / sqrt, Nz / sqrt);
                 }
             }
+        }
+
+        public void ChangeBumpCoef(double coef)
+        {
+            _bumpCoef = coef;
+            ChangeUseBump(true);
+        }
+
+        public void ChangeDistributedCoef(double coef)
+        {
+            _distributedCoed = coef;
+        }
+
+        public void ChangeMirrorCoef(double coef)
+        {
+            _mirrorCoef = coef;
+        }
+
+        public void ChangeCosExp(int cosExp)
+        {
+            _cosExp = cosExp;
         }
     }
 
